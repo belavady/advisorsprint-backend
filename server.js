@@ -20,7 +20,7 @@ app.post('/api/claude', async (req, res) => {
   const model =
     agentId === 'synopsis' ? 'claude-opus-4-20250514' :
     agentId === 'synergy'  ? 'claude-opus-4-20250514' :
-                             'claude-sonnet-4-5-20251001';
+                             'claude-sonnet-4-5-20250929';
 
   const maxTokens =
     agentId === 'synopsis' ? 3000 :
