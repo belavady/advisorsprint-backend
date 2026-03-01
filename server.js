@@ -14,13 +14,14 @@ app.post('/api/claude', async (req, res) => {
   const { prompt, agentId } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
 
-  // Tier 1 Opus: 4000 output tokens/min. Cap at 2500 per agent (run sequentially).
+  // Tier 1 Opus: 4000 output tokens/min, 30k input tokens/min.
+  // Keep output low to avoid hitting ceiling. Dense prose = quality not length.
   const maxTokens =
-    agentId === 'synopsis' ? 3000 :
-    agentId === 'synergy'  ? 3000 :
-    agentId === 'platform' ? 3000 :
-    agentId === 'intl'     ? 3000 :
-                             2500;
+    agentId === 'synopsis' ? 2000 :
+    agentId === 'synergy'  ? 2000 :
+    agentId === 'platform' ? 2000 :
+    agentId === 'intl'     ? 2000 :
+                             1500;
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -42,7 +43,13 @@ app.post('/api/claude', async (req, res) => {
         {
           type: 'web_search_20250305',
           name: 'web_search',
-          max_uses: agentId === 'synopsis' ? 4 : 15,
+          max_uses:
+            agentId === 'synopsis'    ? 5  :
+            agentId === 'brand'       ? 8  :
+            agentId === 'margins'     ? 8  :
+            agentId === 'synergy'     ? 8  :
+            agentId === 'platform'    ? 8  :
+                                        10,
         }
       ],
       messages: [{ role: 'user', content: prompt }],
