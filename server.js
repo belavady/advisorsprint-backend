@@ -8,7 +8,7 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, model: 'claude-opus-4-6', streaming: true }));
+app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, model: 'claude-opus-4-20250514', streaming: true }));
 
 app.post('/api/claude', async (req, res) => {
   const { prompt, agentId } = req.body;
@@ -36,7 +36,7 @@ app.post('/api/claude', async (req, res) => {
     const sources = [];
 
     const stream = anthropic.messages.stream({
-      model: 'claude-opus-4-6',
+      model: 'claude-opus-4-20250514',
       max_tokens: maxTokens,
       tools: [
         {
