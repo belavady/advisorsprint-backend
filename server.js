@@ -8,7 +8,7 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, model: 'claude-opus-4-20250514', streaming: true }));
+app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, models: 'sonnet-analysis+opus-synthesis', streaming: true }));
 
 app.post('/api/claude', async (req, res) => {
   const { prompt, agentId } = req.body;
@@ -16,12 +16,19 @@ app.post('/api/claude', async (req, res) => {
 
   // Tier 1 Opus: 4000 output tokens/min, 30k input tokens/min.
   // Keep output low to avoid hitting ceiling. Dense prose = quality not length.
+  // Opus for strategic synthesis; Sonnet for data-gathering
+  const model =
+    agentId === 'synopsis' ? 'claude-opus-4-20250514' :
+    agentId === 'synergy'  ? 'claude-opus-4-20250514' :
+                             'claude-sonnet-4-5-20251001';
+
   const maxTokens =
-    agentId === 'synopsis' ? 2000 :
-    agentId === 'synergy'  ? 2000 :
-    agentId === 'platform' ? 2000 :
-    agentId === 'intl'     ? 2000 :
-                             1500;
+    agentId === 'synopsis' ? 3000 :
+    agentId === 'synergy'  ? 3000 :
+                             2000;
+
+  // Synopsis synthesises — 2 searches enough. All others get 5.
+  const maxSearches = agentId === 'synopsis' ? 2 : 5;
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -37,19 +44,13 @@ app.post('/api/claude', async (req, res) => {
     const sources = [];
 
     const stream = anthropic.messages.stream({
-      model: 'claude-opus-4-20250514',
+      model,
       max_tokens: maxTokens,
       tools: [
         {
           type: 'web_search_20250305',
           name: 'web_search',
-          max_uses:
-            agentId === 'synopsis'    ? 5  :
-            agentId === 'brand'       ? 8  :
-            agentId === 'margins'     ? 8  :
-            agentId === 'synergy'     ? 8  :
-            agentId === 'platform'    ? 8  :
-                                        10,
+          max_uses: maxSearches,
         }
       ],
       messages: [{ role: 'user', content: prompt }],
