@@ -24,9 +24,9 @@ app.post('/api/claude', async (req, res) => {
 
   // Sonnet: 32k output/min — generous. Opus: 4k/min — keep under 4000
   const maxTokens =
-    agentId === 'synopsis' ? 3500 :
-    agentId === 'synergy'  ? 3500 :
-                             4000;
+    agentId === 'synopsis' ? 8000 :
+    agentId === 'synergy'  ? 8000 :
+                             8000;  // Raise to max — truncation is unacceptable
 
   // Synopsis synthesises — 2 searches enough. All others get 5.
   const maxSearches = agentId === 'synopsis' ? 2 : 5;
