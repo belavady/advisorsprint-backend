@@ -78,22 +78,16 @@ app.post('/api/claude', async (req, res) => {
         if (block?.type === 'tool_use' && block?.name === 'web_search') {
           sendEvent('searching', { query: '' }); // query comes via input_json_delta
         }
-        // Extract URLs directly from web_search_tool_result in streamEvent
+        // Extract URLs from web_search_tool_result — emit each as its own small SSE event
         if (block?.type === 'web_search_tool_result') {
-          console.log(`[${agentId}] web_search_tool_result:`, JSON.stringify(block).slice(0, 500));
-          const results = Array.isArray(block.content) ? block.content
-                        : Array.isArray(block.results) ? block.results
-                        : [];
+          const results = Array.isArray(block.content) ? block.content : [];
           for (const item of results) {
             const url   = item.url   || item.source || item.link;
             const title = item.title || item.name   || url;
             if (url && !sources.find(s => s.url === url)) {
               sources.push({ url, title, agent: agentId });
+              sendEvent('source', { url, title, agent: agentId }); // small event, no truncation risk
             }
-          }
-          // Also try top-level url in case it's a single result
-          if (block.url && !sources.find(s => s.url === block.url)) {
-            sources.push({ url: block.url, title: block.title || block.url, agent: agentId });
           }
         }
       }
@@ -126,8 +120,7 @@ app.post('/api/claude', async (req, res) => {
 
     await stream.finalMessage();
 
-    console.log(`[${agentId}] sending done with ${sources.length} sources`);
-    sendEvent('done', { text: fullText, sources });
+    sendEvent('done', { text: fullText });
     res.end();
 
   } catch (error) {
