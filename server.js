@@ -78,12 +78,10 @@ app.post('/api/claude', async (req, res) => {
         if (block?.type === 'tool_use' && block?.name === 'web_search') {
           sendEvent('searching', { query: '' }); // query comes via input_json_delta
         }
-        // Web search results appear as server_tool_result or web_search_result blocks
-        if (block?.type === 'web_search_result' || block?.type === 'server_tool_result') {
-          console.log(`[${agentId}] search result block:`, JSON.stringify(block).slice(0, 200));
-          if (block?.url && !sources.find(s => s.url === block.url)) {
-            sources.push({ url: block.url, title: block.title || block.url, agent: agentId });
-          }
+        // web_search_tool_result blocks are handled in stream.on('message')
+        // Log here for debugging only
+        if (block?.type === 'web_search_tool_result') {
+          console.log(`[${agentId}] search result block found in streamEvent`);
         }
       }
 
@@ -94,13 +92,21 @@ app.post('/api/claude', async (req, res) => {
     });
 
     stream.on('message', (msg) => {
-      // Log assistant message structure
-      console.log(`[${agentId}] assistant message blocks:`, 
-        msg.content.map(b => b.type + (b.name ? ':'+b.name : '')).join(', '));
-
       for (const block of msg.content) {
-        if (block.type === 'tool_use' && block.name === 'web_search' && block.input?.query) {
+        // Capture search query for status display
+        if (block.type === 'server_tool_use' && block.name === 'web_search' && block.input?.query) {
           sendEvent('searching', { query: block.input.query.slice(0, 40) });
+        }
+        // Extract URLs — block type confirmed from Render logs as 'web_search_tool_result'
+        if (block.type === 'web_search_tool_result') {
+          const results = Array.isArray(block.content) ? block.content : [];
+          for (const item of results) {
+            const url   = item.url   || item.source || item.link;
+            const title = item.title || item.name   || url;
+            if (url && !sources.find(s => s.url === url)) {
+              sources.push({ url, title, agent: agentId });
+            }
+          }
         }
       }
     });
