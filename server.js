@@ -126,6 +126,7 @@ app.post('/api/claude', async (req, res) => {
 
     await stream.finalMessage();
 
+    console.log(`[${agentId}] sending done with ${sources.length} sources`);
     sendEvent('done', { text: fullText, sources });
     res.end();
 
