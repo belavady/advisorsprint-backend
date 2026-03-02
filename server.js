@@ -78,10 +78,23 @@ app.post('/api/claude', async (req, res) => {
         if (block?.type === 'tool_use' && block?.name === 'web_search') {
           sendEvent('searching', { query: '' }); // query comes via input_json_delta
         }
-        // web_search_tool_result blocks are handled in stream.on('message')
-        // Log here for debugging only
+        // Extract URLs directly from web_search_tool_result in streamEvent
         if (block?.type === 'web_search_tool_result') {
-          console.log(`[${agentId}] search result block found in streamEvent`);
+          console.log(`[${agentId}] web_search_tool_result:`, JSON.stringify(block).slice(0, 500));
+          const results = Array.isArray(block.content) ? block.content
+                        : Array.isArray(block.results) ? block.results
+                        : [];
+          for (const item of results) {
+            const url   = item.url   || item.source || item.link;
+            const title = item.title || item.name   || url;
+            if (url && !sources.find(s => s.url === url)) {
+              sources.push({ url, title, agent: agentId });
+            }
+          }
+          // Also try top-level url in case it's a single result
+          if (block.url && !sources.find(s => s.url === block.url)) {
+            sources.push({ url: block.url, title: block.title || block.url, agent: agentId });
+          }
         }
       }
 
