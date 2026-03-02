@@ -40,6 +40,12 @@ app.post('/api/claude', async (req, res) => {
     res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
   };
 
+  // Keepalive ping every 20s — prevents Render's 30s idle timeout
+  // Critical for agents doing multiple searches before first token arrives
+  const keepaliveInterval = setInterval(() => {
+    try { res.write(': keepalive\n\n'); } catch(e) { clearInterval(keepaliveInterval); }
+  }, 20000);
+
   try {
     let fullText = '';
     const sources = [];
@@ -120,10 +126,12 @@ app.post('/api/claude', async (req, res) => {
 
     await stream.finalMessage();
 
+    clearInterval(keepaliveInterval);
     sendEvent('done', { text: fullText });
     res.end();
 
   } catch (error) {
+    clearInterval(keepaliveInterval);
     console.error(`Agent ${agentId} error:`, error.message);
     sendEvent('error', { message: error.message });
     res.end();
