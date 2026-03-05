@@ -1,34 +1,32 @@
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 const app = express();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// On Render: puppeteer downloads its own Chromium via npm install.
+// PUPPETEER_EXECUTABLE_PATH env var can override if needed.
+const CHROME_PATH = process.env.PUPPETEER_EXECUTABLE_PATH || null;
+
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, models: 'sonnet-analysis+opus-synthesis', streaming: true }));
+app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, pdf: 'puppeteer-ready' }));
 
+// ━━━ CLAUDE STREAMING ENDPOINT ━━━
 app.post('/api/claude', async (req, res) => {
   const { prompt, agentId } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
 
-  // Tier 1 Opus: 4000 output tokens/min, 30k input tokens/min.
-  // Keep output low to avoid hitting ceiling. Dense prose = quality not length.
-  // Opus for strategic synthesis; Sonnet for data-gathering
   const model =
     agentId === 'synopsis' ? 'claude-opus-4-20250514' :
     agentId === 'synergy'  ? 'claude-opus-4-20250514' :
                              'claude-sonnet-4-5-20250929';
 
-  // Sonnet: 32k output/min — generous. Opus: 4k/min — keep under 4000
-  const maxTokens =
-    agentId === 'synopsis' ? 8000 :
-    agentId === 'synergy'  ? 8000 :
-                             8000;  // Raise to max — truncation is unacceptable
-
-  // Synopsis synthesises — 2 searches enough. All others get 5.
+  const maxTokens = 8000;
   const maxSearches = agentId === 'synopsis' ? 2 : 5;
 
   res.setHeader('Content-Type', 'text/event-stream');
@@ -36,12 +34,8 @@ app.post('/api/claude', async (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
 
-  const sendEvent = (type, data) => {
-    res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
-  };
+  const sendEvent = (type, data) => res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
 
-  // Keepalive ping every 20s — prevents Render's 30s idle timeout
-  // Critical for agents doing multiple searches before first token arrives
   const keepaliveInterval = setInterval(() => {
     try { res.write(': keepalive\n\n'); } catch(e) { clearInterval(keepaliveInterval); }
   }, 20000);
@@ -51,85 +45,53 @@ app.post('/api/claude', async (req, res) => {
     const sources = [];
 
     const stream = anthropic.messages.stream({
-      model,
-      max_tokens: maxTokens,
-      tools: [
-        {
-          type: 'web_search_20250305',
-          name: 'web_search',
-          max_uses: maxSearches,
-        }
-      ],
+      model, max_tokens: maxTokens,
+      tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches }],
       messages: [{ role: 'user', content: prompt }],
     });
 
-    stream.on('text', (text) => {
-      fullText += text;
-      sendEvent('chunk', { text });
-    });
+    stream.on('text', (text) => { fullText += text; sendEvent('chunk', { text }); });
 
-    // Listen to ALL raw stream events to catch web search results
-    // tool_result blocks with URLs appear in server_tool_result events
     stream.on('streamEvent', (event) => {
-      // Log raw event types so we can see the structure in Render logs
       if (event.type !== 'content_block_delta' && event.type !== 'ping') {
-        console.log(`[${agentId}] streamEvent:`, event.type,
-          event.content_block?.type || '',
-          event.delta?.type || '');
+        console.log(`[${agentId}] streamEvent:`, event.type, event.content_block?.type || '');
       }
-
-      // Capture search queries from tool_use content blocks
       if (event.type === 'content_block_start') {
         const block = event.content_block;
-        if (block?.type === 'tool_use' && block?.name === 'web_search') {
-          sendEvent('searching', { query: '' }); // query comes via input_json_delta
-        }
-        // Extract URLs from web_search_tool_result — emit each as its own small SSE event
+        if (block?.type === 'tool_use' && block?.name === 'web_search') sendEvent('searching', { query: '' });
         if (block?.type === 'web_search_tool_result') {
           const results = Array.isArray(block.content) ? block.content : [];
           for (const item of results) {
-            const url   = item.url   || item.source || item.link;
-            const title = item.title || item.name   || url;
+            const url = item.url || item.source || item.link;
+            const title = item.title || item.name || url;
             if (url && !sources.find(s => s.url === url)) {
               sources.push({ url, title, agent: agentId });
-              sendEvent('source', { url, title, agent: agentId }); // small event, no truncation risk
+              sendEvent('source', { url, title, agent: agentId });
             }
           }
         }
-      }
-
-      // Capture completed tool input (search query)
-      if (event.type === 'content_block_stop' && event.index !== undefined) {
-        // Not needed for sources but useful for debug
       }
     });
 
     stream.on('message', (msg) => {
       for (const block of msg.content) {
-        // Capture search query for status display
-        if (block.type === 'server_tool_use' && block.name === 'web_search' && block.input?.query) {
+        if (block.type === 'server_tool_use' && block.name === 'web_search' && block.input?.query)
           sendEvent('searching', { query: block.input.query.slice(0, 40) });
-        }
-        // Extract URLs — block type confirmed from Render logs as 'web_search_tool_result'
         if (block.type === 'web_search_tool_result') {
           const results = Array.isArray(block.content) ? block.content : [];
           for (const item of results) {
-            const url   = item.url   || item.source || item.link;
-            const title = item.title || item.name   || url;
-            if (url && !sources.find(s => s.url === url)) {
-              sources.push({ url, title, agent: agentId });
-            }
+            const url = item.url || item.source || item.link;
+            const title = item.title || item.name || url;
+            if (url && !sources.find(s => s.url === url)) sources.push({ url, title, agent: agentId });
           }
         }
       }
     });
 
     await stream.finalMessage();
-
     clearInterval(keepaliveInterval);
     sendEvent('done', { text: fullText });
     res.end();
-
   } catch (error) {
     clearInterval(keepaliveInterval);
     console.error(`Agent ${agentId} error:`, error.message);
@@ -138,7 +100,61 @@ app.post('/api/claude', async (req, res) => {
   }
 });
 
+// ━━━ PUPPETEER PDF ENDPOINT ━━━
+// Receives: { html, company, acquirer }
+// Returns:  PDF binary
+app.post('/api/pdf', async (req, res) => {
+  const { html, company, acquirer } = req.body;
+  if (!html) return res.status(400).json({ error: 'Missing html' });
+
+  console.log(`[PDF] Generating for ${company} / ${acquirer || 'standalone'} — ${html.length} chars HTML`);
+
+  let browser;
+  try {
+    const launchOpts = {
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--font-render-hinting=none'],
+      headless: true
+    };
+    if (CHROME_PATH) launchOpts.executablePath = CHROME_PATH;
+    browser = await puppeteer.launch(launchOpts);
+
+    const page = await browser.newPage();
+    await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
+    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 90000 });
+    
+    // Wait for charts/fonts to fully render
+    await new Promise(r => setTimeout(r, 2500));
+
+    const pdf = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
+      displayHeaderFooter: false,
+    });
+
+    await browser.close();
+    const filename = `${(company||'Report').replace(/\s+/g,'_')}_AdvisorSprint_${new Date().toISOString().slice(0,10)}.pdf`;
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', pdf.length);
+    res.send(pdf);
+    console.log(`[PDF] Done — ${pdf.length} bytes`);
+  } catch (error) {
+    if (browser) await browser.close().catch(() => {});
+    console.error('[PDF] Error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`AdvisorSprint — Opus 4 + web search + streaming, port ${PORT}`);
+  console.log(`AdvisorSprint — port ${PORT}`);
+  if (CHROME_PATH) {
+    fs.access(CHROME_PATH, fs.constants.X_OK, (err) => {
+      if (err) console.warn('[PDF] WARNING: Chrome not found at', CHROME_PATH);
+      else console.log('[PDF] Chrome ready at', CHROME_PATH);
+    });
+  } else {
+    console.log('[PDF] Using puppeteer bundled Chromium');
+  }
 });
