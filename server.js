@@ -1,18 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 const app = express();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-// puppeteer-core requires explicit Chrome path.
-// Render's Linux environment has Chromium at one of these locations.
-const CHROME_PATH = process.env.PUPPETEER_EXECUTABLE_PATH
-  || '/usr/bin/chromium-browser'
-  || '/usr/bin/chromium'
-  || '/usr/bin/google-chrome';
+const CHROME_PATH = process.env.PUPPETEER_EXECUTABLE_PATH || null;
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -104,47 +99,26 @@ app.post('/api/claude', async (req, res) => {
 });
 
 // ━━━ PUPPETEER PDF ENDPOINT ━━━
-// Receives: { html, company, acquirer }
-// Returns:  PDF binary
 app.post('/api/pdf', async (req, res) => {
   const { html, company, acquirer } = req.body;
   if (!html) return res.status(400).json({ error: 'Missing html' });
-
-  console.log(`[PDF] Generating for ${company} / ${acquirer || 'standalone'} — ${html.length} chars HTML`);
-
+  console.log(`[PDF] Generating for ${company} — ${html.length} chars`);
   let browser;
   try {
-    // Detect available Chrome on Render
-    const { execSync } = require('child_process');
-    let chromePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    if (!chromePath) {
-      for (const p of ['/usr/bin/chromium-browser','/usr/bin/chromium','/usr/bin/google-chrome','/usr/bin/google-chrome-stable']) {
-        try { execSync(`test -x ${p}`); chromePath = p; break; } catch(e) {}
-      }
-    }
-    if (!chromePath) throw new Error('No Chromium found. Set PUPPETEER_EXECUTABLE_PATH env var on Render.');
-
     const launchOpts = {
-      executablePath: chromePath,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--font-render-hinting=none'],
+      args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-gpu','--font-render-hinting=none'],
       headless: true
     };
+    if (CHROME_PATH) launchOpts.executablePath = CHROME_PATH;
     browser = await puppeteer.launch(launchOpts);
-
     const page = await browser.newPage();
     await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: 'networkidle0', timeout: 90000 });
-    
-    // Wait for charts/fonts to fully render
     await new Promise(r => setTimeout(r, 2500));
-
     const pdf = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
-      displayHeaderFooter: false,
+      format: 'A4', printBackground: true,
+      margin: { top:'0mm', right:'0mm', bottom:'0mm', left:'0mm' }
     });
-
     await browser.close();
     const filename = `${(company||'Report').replace(/\s+/g,'_')}_AdvisorSprint_${new Date().toISOString().slice(0,10)}.pdf`;
     res.setHeader('Content-Type', 'application/pdf');
@@ -159,8 +133,11 @@ app.post('/api/pdf', async (req, res) => {
   }
 });
 
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`AdvisorSprint — port ${PORT}`);
-  console.log('[PDF] Using puppeteer-core — Chrome path:', CHROME_PATH || 'auto-detect at request time');
+  console.log(`AdvisorSprint — port ${PORT}`);
+  if (CHROME_PATH) console.log('[PDF] Chrome path:', CHROME_PATH);
+  else console.log('[PDF] Using puppeteer bundled Chromium');
 });
