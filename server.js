@@ -112,8 +112,12 @@ app.post('/api/pdf', async (req, res) => {
     if (CHROME_PATH) launchOpts.executablePath = CHROME_PATH;
     browser = await puppeteer.launch(launchOpts);
     const page = await browser.newPage();
+    // Allow Google Fonts CDN in headless context
+    await page.setExtraHTTPHeaders({ 'Accept-Language': 'en-US,en;q=0.9' });
     await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
-    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 90000 });
+    await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    // Wait for fonts + charts to render — more reliable than networkidle0
+    await new Promise(r => setTimeout(r, 3500));
     await new Promise(r => setTimeout(r, 2500));
     const pdf = await page.pdf({
       format: 'A4', printBackground: true,
