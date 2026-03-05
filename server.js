@@ -1,15 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const fs = require('fs');
 
 const app = express();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-// On Render: puppeteer downloads its own Chromium via npm install.
-// PUPPETEER_EXECUTABLE_PATH env var can override if needed.
-const CHROME_PATH = process.env.PUPPETEER_EXECUTABLE_PATH || null;
+// puppeteer-core requires explicit Chrome path.
+// Render's Linux environment has Chromium at one of these locations.
+const CHROME_PATH = process.env.PUPPETEER_EXECUTABLE_PATH
+  || '/usr/bin/chromium-browser'
+  || '/usr/bin/chromium'
+  || '/usr/bin/google-chrome';
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -111,11 +114,21 @@ app.post('/api/pdf', async (req, res) => {
 
   let browser;
   try {
+    // Detect available Chrome on Render
+    const { execSync } = require('child_process');
+    let chromePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    if (!chromePath) {
+      for (const p of ['/usr/bin/chromium-browser','/usr/bin/chromium','/usr/bin/google-chrome','/usr/bin/google-chrome-stable']) {
+        try { execSync(`test -x ${p}`); chromePath = p; break; } catch(e) {}
+      }
+    }
+    if (!chromePath) throw new Error('No Chromium found. Set PUPPETEER_EXECUTABLE_PATH env var on Render.');
+
     const launchOpts = {
+      executablePath: chromePath,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--font-render-hinting=none'],
       headless: true
     };
-    if (CHROME_PATH) launchOpts.executablePath = CHROME_PATH;
     browser = await puppeteer.launch(launchOpts);
 
     const page = await browser.newPage();
@@ -149,12 +162,5 @@ app.post('/api/pdf', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`AdvisorSprint — port ${PORT}`);
-  if (CHROME_PATH) {
-    fs.access(CHROME_PATH, fs.constants.X_OK, (err) => {
-      if (err) console.warn('[PDF] WARNING: Chrome not found at', CHROME_PATH);
-      else console.log('[PDF] Chrome ready at', CHROME_PATH);
-    });
-  } else {
-    console.log('[PDF] Using puppeteer bundled Chromium');
-  }
+  console.log('[PDF] Using puppeteer-core — Chrome path:', CHROME_PATH || 'auto-detect at request time');
 });
