@@ -76,10 +76,10 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "market",
   "kpis": [
-    {"label": "Category Size", "value": "₹X,XXX Cr", "sub": "source + year", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Yogabar Market Share", "value": "X.X%", "sub": "est. basis", "trend": "up", "confidence": "H|M|L"},
-    {"label": "QC Share of Category", "value": "XX%", "sub": "source", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Category YoY Growth", "value": "XX%", "sub": "source", "trend": "up", "confidence": "H|M|L"}
+    {"label": "D2C Nutrition Segment Size", "value": "₹X,XXX Cr", "sub": "the insurgent sub-segment Yogabar competes in — NOT the total ₹45,000 Cr FMCG category", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Yogabar Share in D2C Segment", "value": "X.X%", "sub": "share within D2C/premium nutrition segment, not total FMCG — e.g. ₹202Cr / ₹X,XXXCr segment", "trend": "up", "confidence": "H|M|L"},
+    {"label": "D2C Segment YoY Growth", "value": "XX%", "sub": "growth rate of the insurgent D2C sub-segment, not blended category average", "trend": "up", "confidence": "H|M|L"},
+    {"label": "QC Share of Nutrition Revenue", "value": "XX%", "sub": "QC as % of Yogabar revenue — shows penetration gap", "trend": "up", "confidence": "H|M|L"}
   ],
   "competitorBubbles": [
     {"name": "Yogabar", "growthRate": 83, "brandStrength": 72, "revenueCr": 202, "highlight": true},
@@ -109,10 +109,10 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "portfolio",
   "kpis": [
-    {"label": "Est. Total SKUs", "value": "XX", "sub": "est.", "trend": "flat", "confidence": "H|M|L"},
-    {"label": "Top 3 SKU Revenue Concentration", "value": "XX%", "sub": "est.", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Avg Portfolio Gross Margin", "value": "XX%", "sub": "est.", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Post-Optimisation Margin", "value": "XX%", "sub": "projected", "trend": "up", "confidence": "H|M|L"}
+    {"label": "Active SKU Count", "value": "XX", "sub": "est. — focus on productive SKUs not total launches", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Top SKU Revenue Concentration", "value": "XX%", "sub": "top 3 SKUs as % of revenue — concentration risk signal", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Portfolio Gross Margin vs Peers", "value": "XX% vs XX%", "sub": "Yogabar GM vs premium D2C peer benchmark (not vs FMCG average)", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Margin Upside via Mix Shift", "value": "+X pp", "sub": "gross margin gain if premium tier grows to X% of mix", "trend": "up", "confidence": "H|M|L"}
   ],
   "skuMatrix": [
     {"name": "SKU/Tier name", "marketGrowth": 0, "yogabarPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
@@ -140,10 +140,10 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "brand",
   "kpis": [
-    {"label": "Brand Awareness (Urban)", "value": "XX%", "sub": "est.", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Premium Perception Score", "value": "X/10", "sub": "vs 7.5 ideal", "trend": "down", "confidence": "H|M|L"},
-    {"label": "ITC Association Sentiment", "value": "Positive|Neutral|Negative", "sub": "est.", "trend": "flat", "confidence": "H|M|L"},
-    {"label": "Repeat Purchase Rate", "value": "XX%", "sub": "est.", "trend": "up", "confidence": "H|M|L"}
+    {"label": "Aided Awareness (Core TG)", "value": "XX%", "sub": "urban health-conscious 25-40 — Yogabar's actual target group, not general population", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Premium Score vs Whole Truth", "value": "X.X vs X.X", "sub": "Yogabar premium perception vs Whole Truth — the direct benchmark", "trend": "down", "confidence": "H|M|L"},
+    {"label": "ITC Association Impact", "value": "Positive|Neutral|Negative", "sub": "sentiment among core TG toward ITC ownership", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Repeat Rate vs D2C Benchmark", "value": "XX% vs XX%", "sub": "Yogabar repeat vs healthy D2C category benchmark", "trend": "up", "confidence": "H|M|L"}
   ],
   "positioningMap": [
     {"name": "Yogabar", "functional": 0, "premium": 0, "highlight": true, "arrowFunctional": 0, "arrowPremium": 0},
@@ -253,10 +253,10 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "competitive",
   "kpis": [
-    {"label": "High-Threat Competitors", "value": "X", "sub": "as identified", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Yogabar Market Rank", "value": "#X", "sub": "in D2C nutrition", "trend": "flat", "confidence": "H|M|L"},
-    {"label": "Fastest Growing Rival", "value": "Name +XX%", "sub": "est. FY25", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Key Vulnerability", "value": "one word", "sub": "e.g. functional gap", "trend": "flat", "confidence": "H|M|L"}
+    {"label": "Rank in D2C Nutrition Segment", "value": "#X of X", "sub": "by revenue within D2C/premium nutrition — not vs Britannia or Kellogg's", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Whole Truth Revenue Gap", "value": "₹XXCr behind/ahead", "sub": "absolute gap vs closest direct rival — closing or widening?", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Fastest Rival Growth Rate", "value": "+XX% (Name)", "sub": "who is accelerating fastest within the D2C peer set", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Yogabar Functional Gap", "value": "X SKUs vs XX", "sub": "functional/protein SKUs vs Whole Truth — product territory risk", "trend": "flat", "confidence": "H|M|L"}
   ],
   "threatHeatmap": [
     {"competitor": "Whole Truth",   "price": "H|M|L", "channel": "H|M|L", "product": "H|M|L", "brand": "H|M|L", "distribution": "H|M|L", "growth": "H|M|L"},
