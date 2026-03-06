@@ -19,11 +19,16 @@ app.post('/api/claude', async (req, res) => {
   if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
 
   const model =
-    agentId === 'synopsis' ? 'claude-opus-4-20250514' :
-    agentId === 'synergy'  ? 'claude-opus-4-20250514' :
-                             'claude-sonnet-4-5-20250929';
+    agentId === 'synopsis' ? 'claude-opus-4-6' :
+    agentId === 'synergy'  ? 'claude-opus-4-6' :
+                             'claude-sonnet-4-6';
 
-  const maxTokens = 8000;
+  // Sonnet 4.6: 64k output max — 16k gives full prose + DATA_BLOCK, no truncation
+  // Opus 4.6: 4k output/min rate limit — keep 8k to stay safe
+  const maxTokens =
+    agentId === 'synopsis' ? 8000 :
+    agentId === 'synergy'  ? 8000 :
+                             16000;
   const maxSearches = agentId === 'synopsis' ? 2 : 5;
 
   res.setHeader('Content-Type', 'text/event-stream');
@@ -140,7 +145,7 @@ app.post('/api/pdf', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`AdvisorSprint — port ${PORT}`);
-  console.log(`AdvisorSprint — port ${PORT}`);
+  console.log(`AdvisorSprint — Sonnet 4.6 × 8 + Opus 4.6 × 2 — port ${PORT}`);
+  console.log(`AdvisorSprint — Sonnet 4.6 × 8 + Opus 4.6 × 2 — port ${PORT}`);
   console.log('[PDF] Using @sparticuz/chromium — no download needed');
 });
