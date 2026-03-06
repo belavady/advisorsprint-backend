@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 const app = express();
@@ -105,32 +105,9 @@ app.post('/api/pdf', async (req, res) => {
   console.log(`[PDF] Generating for ${company} — ${html.length} chars`);
   let browser;
   try {
-    const { execSync } = require('child_process');
-    let chromePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    if (!chromePath) {
-      const candidates = [
-        '/usr/bin/google-chrome-stable',
-        '/usr/bin/google-chrome',
-        '/usr/bin/chromium-browser',
-        '/usr/bin/chromium',
-        '/snap/bin/chromium',
-      ];
-      for (const p of candidates) {
-        try { execSync(`test -x ${p}`); chromePath = p; break; } catch(e) {}
-      }
-    }
-    if (!chromePath) {
-      try {
-        chromePath = execSync('which google-chrome-stable || which google-chrome || which chromium-browser || which chromium 2>/dev/null', {encoding:'utf8'}).trim().split('\n')[0];
-      } catch(e) {}
-    }
-    if (!chromePath) throw new Error('No Chrome found. Set PUPPETEER_EXECUTABLE_PATH in Render environment.');
-    console.log('[PDF] Chrome found at:', chromePath);
-    browser = await puppeteer.launch({
-      executablePath: chromePath,
-      args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-gpu','--font-render-hinting=none'],
-      headless: true
-    });
+    // Let puppeteer find its own downloaded Chrome — no path override needed
+    const launchArgs = ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-gpu','--font-render-hinting=none'];
+    browser = await puppeteer.launch({ args: launchArgs, headless: true });
     const page = await browser.newPage();
     // Allow Google Fonts CDN in headless context
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'en-US,en;q=0.9' });
