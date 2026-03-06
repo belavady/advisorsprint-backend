@@ -1,13 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const Anthropic = require('@anthropic-ai/sdk');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
 const fs = require('fs');
 
 const app = express();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-const CHROME_PATH = process.env.PUPPETEER_EXECUTABLE_PATH || null;
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -105,9 +104,13 @@ app.post('/api/pdf', async (req, res) => {
   console.log(`[PDF] Generating for ${company} — ${html.length} chars`);
   let browser;
   try {
-    // Let puppeteer find its own downloaded Chrome — no path override needed
-    const launchArgs = ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-gpu','--font-render-hinting=none'];
-    browser = await puppeteer.launch({ args: launchArgs, headless: true });
+    // @sparticuz/chromium — pre-compiled binary, works on Render/Lambda/Railway
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      defaultViewport: null,
+    });
     const page = await browser.newPage();
     // Allow Google Fonts CDN in headless context
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'en-US,en;q=0.9' });
@@ -139,6 +142,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`AdvisorSprint — port ${PORT}`);
   console.log(`AdvisorSprint — port ${PORT}`);
-  if (CHROME_PATH) console.log('[PDF] Chrome path:', CHROME_PATH);
-  else console.log('[PDF] Using puppeteer bundled Chromium');
+  console.log('[PDF] Using @sparticuz/chromium — no download needed');
 });
