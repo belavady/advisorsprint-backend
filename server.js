@@ -439,7 +439,7 @@ app.post('/api/claude', async (req, res) => {
                              'claude-sonnet-4-6';
 
   const maxTokens =
-    agentId === 'synopsis' ? 8000 :
+    agentId === 'synopsis' ? 6000 :  // reduced from 8000 — shorter generation = less QUIC timeout risk
     agentId === 'synergy'  ? 8000 :
                              16000;
 
@@ -473,9 +473,11 @@ ${DATA_BLOCK_RULES}`;
 
   const sendEvent = (type, data) => res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
 
+  // Synopsis/Synergy use Opus and take 3-4 min — keepalive every 8s to prevent QUIC drops
+  const keepaliveMs = (agentId === 'synopsis' || agentId === 'synergy') ? 8000 : 20000;
   const keepaliveInterval = setInterval(() => {
     try { res.write(': keepalive\n\n'); } catch(e) { clearInterval(keepaliveInterval); }
-  }, 20000);
+  }, keepaliveMs);
 
   try {
     let fullText = '';
