@@ -76,8 +76,8 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "market",
   "kpis": [
-    {"label": "D2C Nutrition Segment Size", "value": "₹X,XXX Cr", "sub": "the insurgent sub-segment Yogabar competes in — NOT the total ₹45,000 Cr FMCG category", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Yogabar Share in D2C Segment", "value": "X.X%", "sub": "share within D2C/premium nutrition segment, not total FMCG — e.g. ₹202Cr / ₹X,XXXCr segment", "trend": "up", "confidence": "H|M|L"},
+    {"label": "D2C Nutrition Segment Size", "value": "CURRENCY X,XXX UNIT", "sub": "the insurgent sub-segment Yogabar competes in — NOT the total ₹45,000 Cr FMCG category", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Yogabar Share in D2C Segment", "value": "X.X%", "sub": "share within D2C/premium nutrition segment, not total FMCG — e.g. ₹202Cr / CURRENCY X,XXXCr segment", "trend": "up", "confidence": "H|M|L"},
     {"label": "D2C Segment YoY Growth", "value": "XX%", "sub": "growth rate of the insurgent D2C sub-segment, not blended category average", "trend": "up", "confidence": "H|M|L"},
     {"label": "QC Share of Nutrition Revenue", "value": "XX%", "sub": "QC as % of Yogabar revenue — shows penetration gap", "trend": "up", "confidence": "H|M|L"}
   ],
@@ -285,8 +285,8 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "synergy",
   "kpis": [
-    {"label": "Synergies Realised (est.)", "value": "₹XX Cr", "sub": "cumulative to date", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Unrealised Synergy Value", "value": "₹XX Cr", "sub": "est. 3-yr potential", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Synergies Realised (est.)", "value": "CURRENCY XX UNIT", "sub": "cumulative to date", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Unrealised Synergy Value", "value": "CURRENCY XX UNIT", "sub": "est. 3-yr potential", "trend": "flat", "confidence": "H|M|L"},
     {"label": "Highest-Value Next Asset", "value": "asset name", "sub": "est. value", "trend": "up", "confidence": "H|M|L"},
     {"label": "Time to Capture Top 3", "value": "XX months", "sub": "est.", "trend": "flat", "confidence": "H|M|L"}
   ],
@@ -314,9 +314,9 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "platform",
   "kpis": [
-    {"label": "Total Addressable TAM", "value": "₹X,XXX Cr", "sub": "combined opportunities", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Total Addressable TAM", "value": "CURRENCY X,XXX UNIT", "sub": "combined opportunities", "trend": "up", "confidence": "H|M|L"},
     {"label": "Top Opportunity", "value": "name it", "sub": "TAM", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Min Investment Required", "value": "₹XX Cr", "sub": "lowest-entry opportunity", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Min Investment Required", "value": "CURRENCY XX UNIT", "sub": "lowest-entry opportunity", "trend": "flat", "confidence": "H|M|L"},
     {"label": "Fastest Payback", "value": "XX months", "sub": "best opportunity", "trend": "up", "confidence": "H|M|L"}
   ],
   "opportunityBubbles": [
@@ -348,8 +348,8 @@ const DATA_BLOCK_SCHEMAS = {
   "kpis": [
     {"label": "Best Entry Market", "value": "market name", "sub": "rationale", "trend": "up", "confidence": "H|M|L"},
     {"label": "GCC Indian Diaspora", "value": "X.XM people", "sub": "verified", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Analog Brand 3-yr Revenue", "value": "₹XXX Cr", "sub": "best analog", "trend": "up", "confidence": "H|M|L"},
-    {"label": "GCC Entry Investment", "value": "₹XX Cr", "sub": "est.", "trend": "flat", "confidence": "H|M|L"}
+    {"label": "Analog Brand 3-yr Revenue", "value": "CURRENCY XXX UNIT", "sub": "best analog", "trend": "up", "confidence": "H|M|L"},
+    {"label": "GCC Entry Investment", "value": "CURRENCY XX UNIT", "sub": "est.", "trend": "flat", "confidence": "H|M|L"}
   ],
   "analogBrands": [
     {"name": "brand name", "market": "market", "strategy": "brief strategy", "revenueTrajectory": [0, 0, 0, 0], "lesson": "one transferable lesson"},
@@ -378,9 +378,9 @@ const DATA_BLOCK_SCHEMAS = {
   "agent": "synopsis",
   "kpis": [
     {"label": "Overall Verdict", "value": "word", "sub": "basis", "trend": "up", "confidence": "H"},
-    {"label": "Biggest Opportunity", "value": "₹XXX Cr", "sub": "what it is", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Biggest Opportunity", "value": "CURRENCY XXX UNIT", "sub": "what it is", "trend": "up", "confidence": "H|M|L"},
     {"label": "Biggest Risk", "value": "name it", "sub": "why", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Time to ₹500 Cr", "value": "FY2X", "sub": "achievable if...", "trend": "up", "confidence": "H|M|L"}
+    {"label": "Revenue Milestone Target", "value": "FY2X", "sub": "next major revenue milestone — e.g. 2x current revenue target year", "trend": "up", "confidence": "H|M|L"}
   ],
   "agentVerdicts": [
     {"agent": "Market",      "agentId": "market",      "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
@@ -430,8 +430,14 @@ DATA_BLOCK RULES — READ CAREFULLY:
 
 // ━━━ CLAUDE STREAMING ENDPOINT ━━━
 app.post('/api/claude', async (req, res) => {
-  const { prompt, agentId } = req.body;
+  const { prompt, agentId, market } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+
+  // Detect if this is a Yogabar/ITC run
+  const isYogabar = prompt.toLowerCase().includes('yogabar') || prompt.toLowerCase().includes('yoga bar');
+  const currencySymbol = (market === 'US' || market === 'Global') ? '$' : '₹';
+  const currencyUnit = (market === 'US' || market === 'Global') ? 'M' : 'Cr';
+  const currencyLabel = (market === 'US' || market === 'Global') ? '$M' : '₹ Cr';
 
   const model =
     agentId === 'synopsis' ? 'claude-opus-4-6' :
@@ -447,13 +453,19 @@ app.post('/api/claude', async (req, res) => {
 
   // Inject VERIFIED_DATA + agent-specific DATA_BLOCK schema into prompt
   const schema = DATA_BLOCK_SCHEMAS[agentId] || DATA_BLOCK_SCHEMAS['market'];
+  // Replace CURRENCY/UNIT placeholders in schema with actual currency for this market
+  const schemaForMarket = schema
+    .replace(/CURRENCY/g, currencySymbol)
+    .replace(/UNIT/g, currencyUnit);
+
   const dataBlockInstruction = `
 DATA_BLOCK — WRITE THIS FIRST, BEFORE YOUR PROSE:
 
 Begin your response with this block. Fill in ALL fields with real data from your research.
 Why first: guarantees it is present even if response is long.
+IMPORTANT: Use ${currencyLabel} for ALL monetary values in this DATA_BLOCK.
 
-${schema}
+${schemaForMarket}
 
 ${DATA_BLOCK_RULES}`;
 
@@ -464,7 +476,9 @@ ${DATA_BLOCK_RULES}`;
     .replace(/DATA_BLOCK — WRITE THIS FIRST[\s\S]*?<<<END_DATA_BLOCK>>>\s*\nDATA_BLOCK rules:[\s\S]*?Do not repeat or summarise the DATA_BLOCK in your prose\.\s*/g, '')
     .replace(/VERIFIED FINANCIAL DATA:[\s\S]*?If no figures are provided, find them through web search\.\s*/g, '');
 
-  const finalPrompt = VERIFIED_DATA + '\n\n' + dataBlockInstruction + '\n\n' + cleanedPrompt;
+  // Only inject VERIFIED_DATA for Yogabar/ITC runs — other companies get wrong data otherwise
+  const verifiedBlock = isYogabar ? VERIFIED_DATA + '\n\n' : '';
+  const finalPrompt = verifiedBlock + dataBlockInstruction + '\n\n' + cleanedPrompt;
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
