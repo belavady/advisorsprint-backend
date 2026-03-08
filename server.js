@@ -415,6 +415,604 @@ const DATA_BLOCK_SCHEMAS = {
 <<<END_DATA_BLOCK>>>`
 };
 
+// ━━━ SAAS DATA_BLOCK SCHEMAS ━━━
+const SAAS_DATA_BLOCK_SCHEMAS = {
+
+  market: `<<<DATA_BLOCK>>>
+{
+  "agent": "market",
+  "kpis": [
+    {"label": "Category TAM", "value": "$XB", "sub": "total addressable market", "trend": "up|down|flat", "confidence": "H|M|L"},
+    {"label": "TAM Growth Rate", "value": "XX%", "sub": "CAGR estimate", "trend": "up|down|flat", "confidence": "H|M|L"},
+    {"label": "Category Stage", "value": "word", "sub": "land-grab|growth|consolidation|mature", "trend": "up|down|flat", "confidence": "H|M|L"},
+    {"label": "Company Category Share", "value": "X%", "sub": "estimated share of served market", "trend": "up|down|flat", "confidence": "H|M|L"}
+  ],
+  "categoryMap": [
+    {"competitor": "company name", "revenueM": 0, "growth": 0, "position": "leader|challenger|niche|emerging"},
+    {"competitor": "company name", "revenueM": 0, "growth": 0, "position": "leader|challenger|niche|emerging"},
+    {"competitor": "company name", "revenueM": 0, "growth": 0, "position": "leader|challenger|niche|emerging"},
+    {"competitor": "company name", "revenueM": 0, "growth": 0, "position": "leader|challenger|niche|emerging"},
+    {"competitor": "company name", "revenueM": 0, "growth": 0, "position": "leader|challenger|niche|emerging"}
+  ],
+  "structuralForces": [
+    {"force": "describe force", "impact": "H|M|L", "timeline": "6-12mo|1-2yr|3-5yr", "verdict": "tailwind|headwind"},
+    {"force": "describe force", "impact": "H|M|L", "timeline": "6-12mo|1-2yr|3-5yr", "verdict": "tailwind|headwind"},
+    {"force": "describe force", "impact": "H|M|L", "timeline": "6-12mo|1-2yr|3-5yr", "verdict": "tailwind|headwind"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important market finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  product: `<<<DATA_BLOCK>>>
+{
+  "agent": "product",
+  "kpis": [
+    {"label": "Core Moat Type", "value": "word", "sub": "network effects|data|switching cost|brand", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Moat Durability", "value": "word", "sub": "strong|moderate|shallow — with timeline", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Platform vs Point Solution", "value": "word", "sub": "platform|expanding|point solution", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Network Effect Strength", "value": "word", "sub": "real|partial|absent", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "moatAssessment": [
+    {"dimension": "Data Network Effects", "strength": 0, "verdict": "real|partial|absent", "evidence": "one sentence"},
+    {"dimension": "Switching Costs", "strength": 0, "verdict": "high|medium|low", "evidence": "one sentence"},
+    {"dimension": "Technical Differentiation", "strength": 0, "verdict": "strong|moderate|weak", "evidence": "one sentence"},
+    {"dimension": "Supplier/Partner Lock-in", "strength": 0, "verdict": "strong|moderate|weak", "evidence": "one sentence"}
+  ],
+  "disintermediationRisks": [
+    {"threat": "company or force", "probability": "H|M|L", "timeline": "6mo|12mo|24mo|36mo", "impact": "existential|serious|manageable"},
+    {"threat": "company or force", "probability": "H|M|L", "timeline": "6mo|12mo|24mo|36mo", "impact": "existential|serious|manageable"},
+    {"threat": "company or force", "probability": "H|M|L", "timeline": "6mo|12mo|24mo|36mo", "impact": "existential|serious|manageable"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important product finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  gtm: `<<<DATA_BLOCK>>>
+{
+  "agent": "gtm",
+  "kpis": [
+    {"label": "Primary GTM Motion", "value": "word", "sub": "PLG|direct sales|channel|hybrid", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Est. CAC Payback", "value": "Xmo", "sub": "months to recover CAC", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Pricing Model", "value": "word", "sub": "seat|usage|credits|outcome|tier", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "GTM Efficiency", "value": "word", "sub": "improving|stable|declining", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "funnelStages": [
+    {"stage": "Awareness", "mechanic": "describe", "strength": "strong|moderate|weak", "gap": "describe gap or null"},
+    {"stage": "Trial/Activation", "mechanic": "describe", "strength": "strong|moderate|weak", "gap": "describe gap or null"},
+    {"stage": "Conversion", "mechanic": "describe", "strength": "strong|moderate|weak", "gap": "describe gap or null"},
+    {"stage": "Expansion", "mechanic": "describe", "strength": "strong|moderate|weak", "gap": "describe gap or null"},
+    {"stage": "Enterprise", "mechanic": "describe", "strength": "strong|moderate|weak", "gap": "describe gap or null"}
+  ],
+  "pricingComps": [
+    {"company": "name", "model": "seat|usage|credits|tier", "avcEst": "$XXk", "nrrSignal": "strong|moderate|weak"},
+    {"company": "name", "model": "seat|usage|credits|tier", "avcEst": "$XXk", "nrrSignal": "strong|moderate|weak"},
+    {"company": "name", "model": "seat|usage|credits|tier", "avcEst": "$XXk", "nrrSignal": "strong|moderate|weak"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important GTM finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  revenue: `<<<DATA_BLOCK>>>
+{
+  "agent": "revenue",
+  "kpis": [
+    {"label": "Est. ARR", "value": "$XXM", "sub": "methodology shown in prose", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Est. ARR Growth", "value": "XX%", "sub": "YoY estimate", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Est. Gross Margin", "value": "XX%", "sub": "vs 70-80% SaaS benchmark", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Rule of 40", "value": "XX", "sub": "growth% + FCF margin%", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "arrTriangulation": [
+    {"method": "Funding round back-calculation", "estimate": "$XXM", "confidence": "H|M|L", "basis": "one sentence"},
+    {"method": "Headcount × revenue/employee", "estimate": "$XXM", "confidence": "H|M|L", "basis": "one sentence"},
+    {"method": "Public signals / founder statements", "estimate": "$XXM", "confidence": "H|M|L", "basis": "one sentence"}
+  ],
+  "ruleOf40Comps": [
+    {"company": "name", "growthRate": 0, "fcfMargin": 0, "ruleOf40": 0, "stage": "comparable stage"},
+    {"company": "name", "growthRate": 0, "fcfMargin": 0, "ruleOf40": 0, "stage": "comparable stage"},
+    {"company": "name", "growthRate": 0, "fcfMargin": 0, "ruleOf40": 0, "stage": "comparable stage"},
+    {"company": "name", "growthRate": 0, "fcfMargin": 0, "ruleOf40": 0, "stage": "comparable stage"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important revenue health finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  customer: `<<<DATA_BLOCK>>>
+{
+  "agent": "customer",
+  "kpis": [
+    {"label": "Primary ICP", "value": "short description", "sub": "ideal customer profile", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Customer Base Health", "value": "word", "sub": "strong|mixed|at-risk", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Top Churn Driver", "value": "short label", "sub": "primary reason customers leave", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Concentration Risk", "value": "word", "sub": "high|medium|low", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "segmentMap": [
+    {"segment": "segment name", "sizeEst": "S|M|L", "retentionSignal": "strong|moderate|weak", "expansionSignal": "strong|moderate|weak", "verdict": "engine|neutral|anchor"},
+    {"segment": "segment name", "sizeEst": "S|M|L", "retentionSignal": "strong|moderate|weak", "expansionSignal": "strong|moderate|weak", "verdict": "engine|neutral|anchor"},
+    {"segment": "segment name", "sizeEst": "S|M|L", "retentionSignal": "strong|moderate|weak", "expansionSignal": "strong|moderate|weak", "verdict": "engine|neutral|anchor"},
+    {"segment": "segment name", "sizeEst": "S|M|L", "retentionSignal": "strong|moderate|weak", "expansionSignal": "strong|moderate|weak", "verdict": "engine|neutral|anchor"}
+  ],
+  "churnDrivers": [
+    {"driver": "describe driver", "severity": "H|M|L", "segment": "which segment", "mitigation": "one sentence"},
+    {"driver": "describe driver", "severity": "H|M|L", "segment": "which segment", "mitigation": "one sentence"},
+    {"driver": "describe driver", "severity": "H|M|L", "segment": "which segment", "mitigation": "one sentence"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important customer finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  competitive: `<<<DATA_BLOCK>>>
+{
+  "agent": "competitive",
+  "kpis": [
+    {"label": "Competitive Position", "value": "word", "sub": "leader|strong challenger|vulnerable|at-risk", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Switching Cost", "value": "word", "sub": "high|medium|low — with time estimate", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Most Dangerous Threat", "value": "company name", "sub": "timeline to parity", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Differentiation Durability", "value": "word", "sub": "durable|12-18mo window|eroding", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "competitorBattlecard": [
+    {"competitor": "name", "revenueM": 0, "overlap": "H|M|L", "attackVector": "describe", "vulnerability": "describe", "threat": "H|M|L"},
+    {"competitor": "name", "revenueM": 0, "overlap": "H|M|L", "attackVector": "describe", "vulnerability": "describe", "threat": "H|M|L"},
+    {"competitor": "name", "revenueM": 0, "overlap": "H|M|L", "attackVector": "describe", "vulnerability": "describe", "threat": "H|M|L"},
+    {"competitor": "name", "revenueM": 0, "overlap": "H|M|L", "attackVector": "describe", "vulnerability": "describe", "threat": "H|M|L"}
+  ],
+  "moatComponents": [
+    {"component": "describe moat component", "strength": 0, "replicableIn": "6mo|12mo|24mo|not replicable", "verdict": "strong|moderate|weak"},
+    {"component": "describe moat component", "strength": 0, "replicableIn": "6mo|12mo|24mo|not replicable", "verdict": "strong|moderate|weak"},
+    {"component": "describe moat component", "strength": 0, "replicableIn": "6mo|12mo|24mo|not replicable", "verdict": "strong|moderate|weak"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important competitive finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  funding: `<<<DATA_BLOCK>>>
+{
+  "agent": "funding",
+  "kpis": [
+    {"label": "Last Valuation", "value": "$XB", "sub": "date of last round", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Implied ARR Multiple", "value": "XXx", "sub": "valuation ÷ estimated ARR", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Multiple vs Peers", "value": "word", "sub": "premium|at-market|discount", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Most Likely Outcome", "value": "word", "sub": "IPO|acquisition|PE|independent", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "fundingHistory": [
+    {"round": "Seed|A|B|C|D|other", "amount": "$XXM", "date": "YYYY", "leadInvestor": "name", "impliedValuation": "$XXM"},
+    {"round": "Seed|A|B|C|D|other", "amount": "$XXM", "date": "YYYY", "leadInvestor": "name", "impliedValuation": "$XXM"},
+    {"round": "Seed|A|B|C|D|other", "amount": "$XXM", "date": "YYYY", "leadInvestor": "name", "impliedValuation": "$XXM"}
+  ],
+  "exitScenarios": [
+    {"outcome": "Strategic Acquisition", "probability": 0, "valuationRangeM": "$XXX-XXXm", "likelyBuyer": "name", "rationale": "one sentence"},
+    {"outcome": "IPO", "probability": 0, "valuationRangeM": "$X-XB", "likelyBuyer": "public markets", "rationale": "one sentence"},
+    {"outcome": "PE Buyout", "probability": 0, "valuationRangeM": "$XXX-XXXm", "likelyBuyer": "PE firm type", "rationale": "one sentence"}
+  ],
+  "compTable": [
+    {"company": "name", "arrM": 0, "multiple": 0, "outcome": "acquired|IPO|private", "acquirer": "name or null"},
+    {"company": "name", "arrM": 0, "multiple": 0, "outcome": "acquired|IPO|private", "acquirer": "name or null"},
+    {"company": "name", "arrM": 0, "multiple": 0, "outcome": "acquired|IPO|private", "acquirer": "name or null"},
+    {"company": "name", "arrM": 0, "multiple": 0, "outcome": "acquired|IPO|private", "acquirer": "name or null"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important funding/valuation finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  pricing: `<<<DATA_BLOCK>>>
+{
+  "agent": "pricing",
+  "kpis": [
+    {"label": "Pricing Model", "value": "word", "sub": "credits|seat|consumption|tier|outcome", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Pricing Power", "value": "word", "sub": "strong|moderate|weak", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Value Metric Alignment", "value": "word", "sub": "strong|partial|misaligned", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Enterprise Pricing Gap", "value": "word", "sub": "addressed|partial|missing", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "pricingModelAssessment": [
+    {"dimension": "Predictability for buyer", "score": 0, "verdict": "good|neutral|problem", "evidence": "one sentence"},
+    {"dimension": "NRR expansion mechanics", "score": 0, "verdict": "good|neutral|problem", "evidence": "one sentence"},
+    {"dimension": "Enterprise scalability", "score": 0, "verdict": "good|neutral|problem", "evidence": "one sentence"},
+    {"dimension": "Competitive positioning", "score": 0, "verdict": "good|neutral|problem", "evidence": "one sentence"},
+    {"dimension": "Value metric alignment", "score": 0, "verdict": "good|neutral|problem", "evidence": "one sentence"}
+  ],
+  "pricingComps": [
+    {"company": "name", "model": "describe", "avgACV": "$XXk", "nrrSignal": "strong|moderate|weak", "lesson": "one sentence"},
+    {"company": "name", "model": "describe", "avgACV": "$XXk", "nrrSignal": "strong|moderate|weak", "lesson": "one sentence"},
+    {"company": "name", "model": "describe", "avgACV": "$XXk", "nrrSignal": "strong|moderate|weak", "lesson": "one sentence"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important pricing finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  intl: `<<<DATA_BLOCK>>>
+{
+  "agent": "intl",
+  "kpis": [
+    {"label": "Est. International Revenue", "value": "XX%", "sub": "share of total ARR", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Primary Expansion Market", "value": "region", "sub": "most ready for expansion", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Regulatory Barrier Level", "value": "word", "sub": "high|medium|low by region", "trend": "up|down|flat|watch", "confidence": "H|M|L"},
+    {"label": "Best Global Benchmark", "value": "company name", "sub": "closest comparable trajectory", "trend": "up|down|flat|watch", "confidence": "H|M|L"}
+  ],
+  "globalBenchmarks": [
+    {"company": "name", "market": "region", "similarity": "H|M|L", "lesson": "one specific actionable lesson", "outcome": "succeeded|failed|mixed"},
+    {"company": "name", "market": "region", "similarity": "H|M|L", "lesson": "one specific actionable lesson", "outcome": "succeeded|failed|mixed"},
+    {"company": "name", "market": "region", "similarity": "H|M|L", "lesson": "one specific actionable lesson", "outcome": "succeeded|failed|mixed"}
+  ],
+  "expansionMarkets": [
+    {"market": "region/country", "readiness": "H|M|L", "tam": "$XXM", "barrier": "describe main barrier", "priority": 1},
+    {"market": "region/country", "readiness": "H|M|L", "tam": "$XXM", "barrier": "describe main barrier", "priority": 2},
+    {"market": "region/country", "readiness": "H|M|L", "tam": "$XXM", "barrier": "describe main barrier", "priority": 3}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important international finding", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`,
+
+  synopsis: `<<<DATA_BLOCK>>>
+{
+  "agent": "synopsis",
+  "kpis": [
+    {"label": "Overall Verdict", "value": "word", "sub": "basis in one phrase", "trend": "up", "confidence": "H"},
+    {"label": "Biggest Opportunity", "value": "$XXM", "sub": "what it is", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Biggest Risk", "value": "name it", "sub": "why it matters", "trend": "watch", "confidence": "H|M|L"},
+    {"label": "12-Month Inflection", "value": "short label", "sub": "the decision that determines the outcome", "trend": "up|watch", "confidence": "H|M|L"}
+  ],
+  "agentVerdicts": [
+    {"agent": "Market",      "agentId": "market",      "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Product",     "agentId": "product",     "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "GTM",         "agentId": "gtm",         "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Revenue",     "agentId": "revenue",     "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Customer",    "agentId": "customer",    "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Competitive", "agentId": "competitive", "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Funding",     "agentId": "funding",     "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Pricing",     "agentId": "pricing",     "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"},
+    {"agent": "Global",      "agentId": "intl",        "verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "oneLiner": "one sentence"}
+  ],
+  "topActions": [
+    {"rank": 1, "action": "specific action", "owner": "team", "quarter": "Q? 20??", "impactM": 0, "effort": "H|M|L"},
+    {"rank": 2, "action": "specific action", "owner": "team", "quarter": "Q? 20??", "impactM": 0, "effort": "H|M|L"},
+    {"rank": 3, "action": "specific action", "owner": "team", "quarter": "Q? 20??", "impactM": 0, "effort": "H|M|L"},
+    {"rank": 4, "action": "specific action", "owner": "team", "quarter": "Q? 20??", "impactM": 0, "effort": "H|M|L"},
+    {"rank": 5, "action": "specific action", "owner": "team", "quarter": "Q? 20??", "impactM": 0, "effort": "H|M|L"}
+  ],
+  "risks": [
+    {"risk": "describe risk", "severity": "H|M|L", "mitigation": "one sentence"},
+    {"risk": "describe risk", "severity": "H|M|L", "mitigation": "one sentence"},
+    {"risk": "describe risk", "severity": "H|M|L", "mitigation": "one sentence"}
+  ],
+  "opportunities": [
+    {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"},
+    {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"},
+    {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"}
+  ],
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — the single most important finding across all 9 agents", "confidence": "H|M|L"}
+}
+<<<END_DATA_BLOCK>>>`
+
+};
+
+
+// ━━━ SAAS AGENT PROMPTS ━━━
+const SAAS_PROMPTS = {
+
+  market: `# AGENT 1: MARKET & CATEGORY INTELLIGENCE
+
+## YOUR MANDATE
+Define the battlefield. What category does [COMPANY] actually compete in — and is that the right category to be in? Most companies describe their category in self-serving terms. Your job is to define it accurately, map its size and maturity, and identify the 2-3 structural forces that will reshape it in the next 3 years.
+
+## WHAT YOU MUST PRODUCE
+
+**Category Definition — Commit to One**
+[COMPANY] may compete in multiple adjacent categories. Name the primary one with precision. For data enrichment companies: is it "B2B data," "GTM tooling," "revenue intelligence," or "workflow automation"? The choice determines the competitive set, the valuation multiple, and the strategic options. Do not hedge — pick the most accurate category and explain why.
+
+**TAM — Built Two Ways**
+Top-down: total B2B SaaS spend on this category, apply realistic penetration rate, show calculation.
+Bottom-up: number of addressable buyers × average ACV × realistic conversion. Show both, explain if they diverge significantly, state which you find more credible.
+
+**Category Maturity Signal**
+Is this category in land-grab phase (grow at all costs, winner-take-most dynamics), growth phase (multiple winners possible, efficiency starting to matter), or consolidation phase (M&A pressure, profitability required, bundling threat)? The answer changes what [COMPANY] should be doing right now. State your verdict with evidence.
+
+**3 Structural Forces**
+Identify the forces that will reshape this category in 3 years. Not generic trends — specific, named forces with timeline and impact direction. Examples: a major acquisition that changes the competitive map, a regulatory development that restricts current practices, an AI capability that makes current tooling obsolete. For each: tailwind or headwind for [COMPANY], and why.
+
+**Competitive Landscape Map**
+Name the 5 most relevant competitors. For each: estimated revenue, growth signal, and their position (leader, challenger, niche, emerging). Where is [COMPANY] in this map — and is that position improving or eroding?
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] market category size TAM 2024 2025"
+- "[COMPANY] competitors market share 2024"
+- "[category name] market growth consolidation 2025"
+- "biggest acquisition [category] 2023 2024"
+
+## WHAT NOT TO COVER
+Do not cover product architecture, pricing, unit economics, competitive tactics, or funding — those belong to other agents. Stay strictly within market and category dynamics.`,
+
+  product: `# AGENT 2: PRODUCT & PLATFORM ARCHITECTURE
+
+## YOUR MANDATE
+Interrogate the product itself. Not what the marketing page says — what the product actually does, where the technical moat genuinely sits, and whether the architecture is built for the next phase of growth or the last one. The central question: is this product defensible or replicable?
+
+## WHAT YOU MUST PRODUCE
+
+**The Core Mechanic — Precisely**
+Describe exactly what [COMPANY]'s product does in 3-4 sentences with technical precision. No marketing language. What data flows in, what transformation occurs, what the user gets out. This establishes the foundation for every other assessment.
+
+**Network Effects Audit — Commit to a Verdict**
+Does [COMPANY]'s product get meaningfully better as more customers use it? Specifically: does usage data from one customer improve results for another? If yes, describe the exact mechanism — this is a genuine data network effect and the moat is real. If no, say so clearly. Partial network effects are common; quantify what percentage of the product benefit comes from network dynamics vs raw product quality.
+
+**Disintermediation Risk — Name the Threats**
+Who are [COMPANY]'s key suppliers, partners, or data providers? For each critical dependency: what is the realistic scenario where they decide to build what [COMPANY] does natively? What is the probability and timeline? This is often the most important product risk and it must be addressed directly, not waved away.
+
+**Platform vs Point Solution Assessment**
+A platform creates value for other builders on top of it. A point solution solves one problem well. Where is [COMPANY] on this spectrum today, and where is the product strategy pointing? Specific evidence: do third parties build on [COMPANY]'s API? Is there an app marketplace or ecosystem? What would make this a platform and how far away is it?
+
+**AI Integration — Genuine or Cosmetic?**
+Assess [COMPANY]'s AI features or roadmap. Is AI integration genuinely transforming the product's value delivery — or is it a feature layer on a fundamentally unchanged architecture? What specifically does the AI version do that the non-AI version could not? Does it create a new moat or just maintain parity with competitors who are all doing the same thing?
+
+**Build vs Buy vs Partner Map**
+What has [COMPANY] built natively, what does it aggregate from partners, and what does it buy through acquisition? This map reveals what the company believes its core competence is. Assess whether those boundaries are drawn correctly.
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] product how it works technology architecture"
+- "[COMPANY] API platform integrations developer"
+- "[COMPANY] AI features product roadmap 2024 2025"
+- "[COMPANY] data network effects moat"
+
+## WHAT NOT TO COVER
+Do not cover pricing, GTM motion, competitive tactics, or financial metrics — those belong to other agents. Stay within product architecture and technical differentiation.`,
+
+  gtm: `# AGENT 3: GO-TO-MARKET & REVENUE ARCHITECTURE
+
+## YOUR MANDATE
+Map how [COMPANY] acquires, converts, and expands customers. The central question: is the GTM engine efficient and scalable, or is growth masking a fundamentally broken motion?
+
+## WHAT YOU MUST PRODUCE
+
+**GTM Motion Classification — Be Specific**
+Is [COMPANY] product-led (users discover and adopt independently), sales-led (AEs drive deals), community-led (practitioners spread word-of-mouth), or a hybrid? For each motion present, assess: what percentage of new ARR does it drive, and is that percentage growing or shrinking? The honest answer here is often more complex than the company's public narrative.
+
+**The Growth Loop — Find and Quantify It**
+Every high-growth SaaS company has a flywheel. For PLG companies: a user adopts → builds something public → drives new signups. For community-led: practitioners share → create demand → convert. Describe [COMPANY]'s specific loop, identify the rate-limiting step, and assess whether it is compounding or plateauing. Where does the loop break?
+
+**Pricing Model Mechanics**
+Describe the exact pricing model — seat-based, credit-based, consumption-based, tiered, or outcome-based. For each model element: does it align price with value delivered? Does it create natural expansion revenue as customers grow? Does it make budgeting easy or hard for buyers? Does it work for SMB and enterprise or just one? Credit-based and consumption-based models require specific scrutiny — find customer complaints about pricing predictability.
+
+**Enterprise Transition Readiness**
+PLG and community-led motions work brilliantly up to a certain company size, then require sales infrastructure to continue scaling. Where is [COMPANY] in this transition? Specific evidence: VP of Enterprise Sales hired when, AE headcount, published enterprise tier, SOC 2 certification, MSA capability. If [COMPANY] is pre-transition, what is the ceiling on the current motion and how far away is it?
+
+**Content and Community as Distribution**
+Assess [COMPANY]'s content, community, and thought leadership as a GTM moat. Is the playbook/template ecosystem proprietary and defensible or can a well-funded competitor replicate it in 12 months? What is the cost of content/community acquisition vs paid acquisition? Which channel drives the highest-quality customers?
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] go to market strategy growth PLG community"
+- "[COMPANY] pricing plans enterprise 2024 2025"
+- "[COMPANY] sales team hiring enterprise AE 2024"
+- "[COMPANY] customer acquisition growth loop playbook"
+
+## WHAT NOT TO COVER
+Do not cover product architecture, financial metrics, competitive moat analysis, or funding — those belong to other agents.`,
+
+  revenue: `# AGENT 4: REVENUE HEALTH & UNIT ECONOMICS
+
+## YOUR MANDATE
+Build the financial picture from public signals. [COMPANY] is likely private — no published financials. Your job is to triangulate ARR, growth rate, gross margin, and unit economics from three independent methods, show your work on every number, and land on a credible range with honest confidence levels.
+
+## WHAT YOU MUST PRODUCE
+
+**ARR Triangulation — Three Methods**
+Method 1 — Funding back-calculation: Take the last known valuation. Apply current SaaS revenue multiples for companies at this growth stage (find current market data — multiples have compressed significantly from 2021 peaks). Back-calculate implied ARR. Show the multiple used and its source.
+Method 2 — Headcount × revenue per employee: Find current headcount (LinkedIn). Apply the revenue-per-employee benchmark for SaaS companies at this stage ($150k-$300k/employee is typical range depending on GTM motion). Show the benchmark used.
+Method 3 — Public signals: Founder interviews, press releases, customer announcements, job posting volume changes YoY. What do these signals imply about scale?
+State all three estimates. If they converge, high confidence. If they diverge, explain why and weight them.
+
+**Growth Rate Estimation**
+Find YoY growth signals: headcount growth rate (LinkedIn 6-month snapshots), job posting volume trend, any public revenue statements. Calculate what growth rate the current valuation requires at prevailing SaaS multiples — does the market signal data support that rate? Be honest if it doesn't.
+
+**Gross Margin Assessment**
+Pure SaaS: 75-85%. Data aggregators with per-query COGS: 60-70%. Services-heavy businesses: 40-60%. Classify [COMPANY] and estimate gross margin accordingly. This matters for valuation — a 65% gross margin business is worth materially less than an 80% gross margin business at the same revenue. Find any comparable companies whose gross margins are public and use them as benchmarks.
+
+**Rule of 40**
+Growth rate + FCF margin. For pre-profitability companies, FCF margin is negative — estimate burn rate from headcount and funding runway. Calculate best case and worst case Rule of 40. Benchmark against 4-5 public SaaS companies at similar scale and growth stage.
+
+**Burn Multiple**
+New ARR added ÷ net cash burned. Best-in-class is below 1x. Estimate from funding history and headcount growth. What does this imply about capital efficiency?
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] revenue ARR 2024 growth rate"
+- "[COMPANY] funding valuation investors 2024"
+- "[COMPANY] headcount employees LinkedIn 2024"
+- "SaaS revenue multiples 2024 2025 growth stage"
+
+## WHAT NOT TO COVER
+Do not cover pricing model design, competitive dynamics, product architecture, or exit scenarios — those belong to other agents. Focus entirely on revenue health and unit economics.`,
+
+  customer: `# AGENT 5: CUSTOMER & SEGMENT INTELLIGENCE
+
+## YOUR MANDATE
+Identify who is actually buying [COMPANY], which segments are healthy, and where the dangerous concentrations are. The central question: which customers are the engine and which are the anchor?
+
+## WHAT YOU MUST PRODUCE
+
+**ICP Definition — Be Precise**
+The ideal customer profile is not "B2B SaaS companies." Define it with specificity: company size range (employees or ARR), industry vertical if concentrated, the specific job title that champions [COMPANY] internally, the specific pain that drives purchase, and the tech stack they typically run alongside [COMPANY]. Find evidence for each element — customer case studies, G2 reviewer profiles, company blog posts about customer stories.
+
+**Segment Map — Engine vs Anchor**
+Identify 3-4 distinct customer segments. For each: estimated size as share of customer base, retention signal (are customers in this segment staying or churning — find evidence from reviews, social media, churned customer comments), expansion signal (are they buying more over time), and a verdict — engine (growing, retaining, expanding), neutral (stable, not a priority), or anchor (high churn, high support cost, low ACV).
+
+**Top 3 Churn Drivers**
+Find the real reasons customers leave. Primary sources: G2 and Capterra reviews filtered for negative, Reddit and Slack community discussions, Twitter/X complaints. Do not guess — find evidence. For each driver: which segment does it concentrate in, severity, and what would fix it.
+
+**Customer Concentration Risk**
+Does [COMPANY] have a small number of very large, very vocal customers who represent disproportionate revenue? The PLG trap: a few power users with huge followings create enormous brand value but may not represent the median paying customer. Assess whether the customer base is broadly distributed or dangerously concentrated in a segment that could shift.
+
+**The SMB Trap Assessment**
+Many PLG companies grow fast with startups and early-stage companies who churn when they run out of funding, pivot, or get acquired. Estimate what percentage of [COMPANY]'s customer base is in companies under 50 employees or pre-Series B funding. What does that imply for cohort retention over a 24-month horizon?
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] customer reviews G2 Capterra 2024"
+- "[COMPANY] case studies customers enterprise 2024"
+- "[COMPANY] churn complaints Reddit Twitter 2024"
+- "[COMPANY] ideal customer profile target market"
+
+## WHAT NOT TO COVER
+Do not cover pricing model, product architecture, competitive dynamics, or financial metrics — those belong to other agents.`,
+
+  competitive: `# AGENT 6: COMPETITIVE MOAT & BATTLEGROUND
+
+## YOUR MANDATE
+Map the competitive landscape with tactical precision. The central question: how durable is [COMPANY]'s competitive position and where is it most vulnerable? Every claim of differentiation must be stress-tested against a well-funded competitor with 18 months and a clear attack vector.
+
+## WHAT YOU MUST PRODUCE
+
+**Switching Cost Quantification**
+What does a customer actually lose when they leave [COMPANY]? Be specific: data exported and lost, workflows rebuilt, integrations re-implemented, team retraining, lost institutional knowledge. Estimate this in hours and dollars for a mid-market customer who has been on [COMPANY] for 18 months. High switching cost = durable position. Low switching cost = the moat is shallower than the company claims.
+
+**Competitor Battlecard — 4 Named Threats**
+For each: estimated revenue, overlap with [COMPANY]'s core use case (high/medium/low), their most effective attack vector against [COMPANY], their biggest vulnerability that [COMPANY] could exploit, and an overall threat level. Be specific and honest — if a competitor is genuinely superior in a key dimension, say so.
+
+**The Partner-Becomes-Competitor Risk**
+Identify which of [COMPANY]'s current partners or data suppliers have the distribution, data, and incentive to build what [COMPANY] does natively. For each: what would trigger the decision to compete, what is the realistic timeline, and what is the impact if they do. This is often the most underestimated competitive threat in SaaS.
+
+**Moat Components — Honest Assessment**
+Break the moat into specific components: data assets, network effects, switching costs, brand, community, technical architecture. For each: rate the strength (0-10), assess whether a competitor with sufficient funding could replicate it in 6, 12, or 24 months, and give a verdict. If the honest answer is that the moat is primarily brand and community — which are real but not structural — say so.
+
+**Defensible Differentiation After Removing Marketing**
+After stripping out what every competitor also claims (AI-powered, easy to use, integrates with everything), what does [COMPANY] have that is genuinely unique and not replicable in 18 months? This is the core of the moat. If the list is short, that is the most important finding.
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] vs [top competitor] comparison 2024 2025"
+- "[COMPANY] competitors alternatives 2024"
+- "[top partner] building competing feature [COMPANY] 2024"
+- "[COMPANY] switching cost migration"
+
+## WHAT NOT TO COVER
+Do not cover financial metrics, pricing architecture, funding, or product roadmap details — those belong to other agents.`,
+
+  funding: `# AGENT 7: FUNDING, VALUATION & STRATEGIC OPTIONS
+
+## YOUR MANDATE
+Reconstruct the financial picture from public signals and model the exit landscape. The central question: what is [COMPANY] actually worth today, who writes the next cheque or the acquisition offer, and what does the cap table pressure mean for decisions being made right now?
+
+## WHAT YOU MUST PRODUCE
+
+**Funding History Reconstruction**
+Map every known funding round: amount, date, lead investor, implied valuation if available. From this, derive: total capital raised, approximate ownership structure, and what each round's size and timing implies about the company's trajectory at that moment. A down round or long gap between rounds is as significant as a headline raise.
+
+**Valuation Benchmarking**
+Current implied valuation ÷ estimated ARR (from Agent 4) = revenue multiple. Find current SaaS revenue multiples for comparable public companies at similar growth rates — multiples have compressed 60-70% from 2021 peaks and the market has bifurcated between high-growth AI-adjacent companies and everything else. Is [COMPANY]'s multiple justified, rich, or cheap? Show the comp table with 4 named companies.
+
+**Three Exit Scenarios — Probability Weighted**
+Scenario 1 — Strategic Acquisition: Who buys [COMPANY] and why? Name the most likely acquirer specifically, explain the strategic rationale (distribution leverage, data asset, competitive defence, product extension), and estimate the valuation range at acquisition. What would have to be true for this to happen in the next 24 months?
+Scenario 2 — IPO: What ARR, growth rate, and profitability profile does [COMPANY] need to be IPO-ready? At current trajectory when does it get there? What is the narrative risk — does the story differentiate from comparable public companies or does it invite comparison to companies that have underperformed?
+Scenario 3 — PE Buyout or Recapitalisation: At what point does a PE firm make a credible offer? What growth rate decline or cap table pressure would trigger this path?
+
+**Cap Table Pressure Analysis**
+Investors in the last round paid a specific price per share. What return do they need and by when? What does that pressure mean for the decisions being made right now — IPO timeline, acquisition openness, pricing strategy, hiring pace?
+
+**Investor Signal Reading**
+Who are the lead investors and what does their portfolio and investment thesis reveal about how they see [COMPANY]'s future? A16z, Sequoia, and Accel back different archetypes. The lead investor's other bets are a signal about the exit path they are optimising for.
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] funding rounds investors valuation 2024"
+- "[COMPANY] acquisition IPO strategic options"
+- "SaaS M&A multiples [category] 2024 2025"
+- "[most likely acquirer] acquisition strategy [category]"
+
+## WHAT NOT TO COVER
+Do not cover product architecture, customer segments, pricing design, or GTM motion — those belong to other agents.`,
+
+  pricing: `# AGENT 8: PRICING POWER & REVENUE MODEL ARCHITECTURE
+
+## YOUR MANDATE
+Stress-test the revenue model. Not just what [COMPANY] charges — whether the pricing architecture is correctly designed for the business it is trying to build. The central question: is the pricing model capturing the maximum revenue the market will bear, or is it leaving money on the table while creating friction that limits growth?
+
+## WHAT YOU MUST PRODUCE
+
+**Pricing Model Mechanics — Precise Description**
+Describe exactly how [COMPANY] charges customers. Credits per action, seats per user, consumption tiers, outcome-based, or hybrid. For credit-based models specifically: what triggers a credit spend, what is the cost per credit at each tier, and what happens when credits run out. Find this from the public pricing page, customer reviews, and any published pricing analysis. Do not guess — find the actual numbers.
+
+**The Five-Dimension Assessment**
+Score the pricing model on:
+1. Predictability for the buyer — can enterprise finance teams forecast their annual spend? Variable pricing models that create surprise invoices kill enterprise deals.
+2. NRR expansion mechanics — does the pricing model create natural expansion as customers grow? The best models grow revenue without any sales effort.
+3. Enterprise scalability — does the model work for a 500-person revenue team the same way it works for a 5-person startup? Or does it break at enterprise scale?
+4. Competitive positioning — does the pricing signal premium, fair value, or commodity? Does it make the sales conversation easier or harder?
+5. Value metric alignment — is [COMPANY] pricing on the unit that most directly scales with customer value delivered? For enrichment tools, contacts found is better than API calls. Verified pipeline influenced is better than contacts found.
+
+**Pricing Power Stress Test**
+If [COMPANY] raised prices 30% tomorrow, what percentage of customers would leave? Which segment would leave first — startups, mid-market, or enterprise? The answer reveals where the real moat is. Find evidence from customer reviews about price sensitivity and value perception. A company with genuine pricing power has customers who say "expensive but worth it." A company without it has customers who say "looking for alternatives."
+
+**Benchmark Against 3 Comps**
+Find 3 comparable companies whose pricing architecture is known. For each: describe their model, estimate average ACV, assess NRR signal (do customers expand or churn), and extract one specific lesson for [COMPANY]. Snowflake's consumption model, HubSpot's seat expansion, and Twilio's usage-based model are useful reference points even if not direct competitors.
+
+**The One Pricing Change That Would Move the Needle**
+Based on the above: what is the single most impactful change to [COMPANY]'s pricing architecture — adding an enterprise tier, shifting the value metric, introducing annual commit discounts, or moving to outcome-based pricing? Specify exactly what the change is, why it would improve NRR, and what the implementation risk is.
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] pricing plans credits cost 2024 2025"
+- "[COMPANY] pricing complaints expensive alternative"
+- "[COMPANY] enterprise pricing annual contract"
+- "SaaS pricing model NRR consumption vs seat based"
+
+## WHAT NOT TO COVER
+Do not cover product architecture, GTM motion, competitive dynamics, or funding — those belong to other agents.`,
+
+  intl: `# AGENT 9: INTERNATIONAL EXPANSION & GLOBAL BENCHMARKS
+
+## YOUR MANDATE
+Two jobs. First: find the global company that most closely mirrors [COMPANY]'s current situation and extract actionable lessons. Second: map the international expansion opportunity with honest assessment of regulatory and product barriers. The central question: what does the global playbook say about what comes next?
+
+## WHAT YOU MUST PRODUCE
+
+**The Primary Global Benchmark — Commit to One**
+Find the company internationally that most closely matches [COMPANY] on: category, GTM motion, valuation stage, and competitive dynamics. Do not pick a vague analog — find the specific company whose trajectory is the most instructive. For data enrichment platforms the comp might be Lusha (Israeli, scaled internationally, GDPR constraints). For decision intelligence platforms the comp is YouGov (UK polling → global brand intelligence, publicly listed). For PLG-led SaaS tools look at Figma, Miro, or Notion's international expansion.
+Extract 3 specific lessons from this benchmark that are actionable for [COMPANY] now — not generic observations but specific decisions the benchmark company made (or failed to make) that [COMPANY] should replicate or avoid.
+
+**Secondary Benchmark — Different Geography or Outcome**
+Find a second company that mirrors [COMPANY] but chose a different path — either a different international strategy or a different exit outcome. What does the contrast reveal?
+
+**International Revenue Assessment**
+Estimate what percentage of [COMPANY]'s current ARR comes from non-US customers. For US-founded B2B SaaS, 20-30% international at Series C stage is typical. Above that = strong international traction. Below 15% = predominantly US business with expansion optionality. Find any signals: EU-specific pricing pages, non-US customer case studies, international office hiring, non-English community content.
+
+**Market-by-Market Expansion Assessment**
+Rank 3 international markets by expansion readiness: TAM in market, product-market fit signals (existing customers, inbound demand), regulatory barrier (GDPR in EU, data localisation in India, PDPA in Southeast Asia), and localisation requirements. For each: give a readiness verdict and the single biggest barrier to overcome before expanding.
+
+**Regulatory Constraints as Strategic Signal**
+For companies handling B2B contact data (like Clay) or opinion data (like Morning Consult): which international markets require fundamental product changes to comply with local law, and which are accessible with current architecture? GDPR Article 6 lawful basis for processing B2B personal data is the most important constraint for enrichment companies. Assess [COMPANY]'s current posture and what it would take to be compliant at scale in the EU.
+
+## SEARCHES TO RUN (pick the 3 most valuable)
+- "[COMPANY] international expansion Europe customers 2024"
+- "[closest benchmark company] international strategy lessons"
+- "[COMPANY] GDPR compliance data privacy Europe"
+- "[category] international market opportunity Europe Asia"
+
+## WHAT NOT TO COVER
+Do not cover domestic competitive dynamics, US pricing, funding, or product architecture details — those belong to other agents.`,
+
+  synopsis: `# AGENT 10: EXECUTIVE SYNOPSIS — STRATEGIC SYNTHESIS
+
+## YOUR MANDATE
+You have read all 9 agent outputs. Your job is not to summarise them — it is to find the single insight that only emerges when you see the full picture. The thread that connects the product architecture risk, the GTM inflection, the valuation pressure, and the competitive timeline into one coherent strategic narrative. If your Synopsis could have been written without reading the 9 agents, it has failed.
+
+## WHAT YOU MUST PRODUCE
+
+**The Central Thesis — One Paragraph**
+Not a summary of what each agent found. The overarching strategic conclusion that explains why everything is connected. What is the fundamental strategic question [COMPANY] must answer in the next 12 months — and what happens if they answer it wrong? This paragraph should make a reader who has been following [COMPANY] closely say "I hadn't thought about it that way."
+
+**9-Agent Verdict Dashboard**
+For each agent: verdict (STRONG / WATCH / OPTIMISE / UNDERDELIVERED / RISK) and one sentence — the single most important finding from that agent's analysis. These verdicts are inputs to the DATA_BLOCK.
+
+**Top 5 Priority Actions — Sequenced**
+Not 10 generic recommendations. The 5 highest-impact, most time-sensitive actions, sequenced by: impact magnitude × speed to result. For each: what specifically to do, which team owns it, which quarter to complete it, estimated revenue impact, and effort level. These should be specific enough that a founder or investor could act on them Monday morning.
+
+**The Underweighted Risk**
+The one threat that appeared in multiple agent analyses but is not getting enough attention publicly. This is the finding that separates a 10-agent synthesis from a single analyst's view — you saw it in the competitive analysis, confirmed it in the product analysis, and the funding analysis explains why it hasn't been addressed. Name it, explain why it is underweighted, and state what the consequence is if it materialises.
+
+**The One Unanswered Question**
+The single most important strategic question [COMPANY] has not answered publicly and must answer in the next 12 months. Not a question about tactics — a question about identity. Examples: "Is [COMPANY] a data company or a workflow company?" "Does [COMPANY] need to own the data or just orchestrate it?" "Can [COMPANY] win enterprise without a direct sales motion?" The answer to this question determines the next 3 years.
+
+**Risks and Opportunities**
+3 risks with severity and mitigation. 3 opportunities with estimated value and confidence. These are the most important ones across all 9 agents — not the obvious ones, the ones that require the full picture to see.
+
+## SYNTHESIS STANDARD
+Read every agent output. Find connections between agents that no individual agent could see. The competitive moat finding + the pricing stress test + the funding cap table pressure may together reveal a strategic imperative that none of them identified alone. That synthesis is what Opus is for.`
+
+};
+
+
 const DATA_BLOCK_RULES = `
 DATA_BLOCK RULES — READ CAREFULLY:
 — Write the DATA_BLOCK FIRST. Your prose analysis comes AFTER <<<END_DATA_BLOCK>>>.
@@ -430,14 +1028,16 @@ DATA_BLOCK RULES — READ CAREFULLY:
 
 // ━━━ CLAUDE STREAMING ENDPOINT ━━━
 app.post('/api/claude', async (req, res) => {
-  const { prompt, agentId, market } = req.body;
+  const { prompt, agentId, market, mode } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
 
-  // Detect if this is a Yogabar/ITC run
-  const isYogabar = prompt.toLowerCase().includes('yogabar') || prompt.toLowerCase().includes('yoga bar');
-  const currencySymbol = (market === 'US' || market === 'Global') ? '$' : '₹';
-  const currencyUnit = (market === 'US' || market === 'Global') ? 'M' : 'Cr';
-  const currencyLabel = (market === 'US' || market === 'Global') ? '$M' : '₹ Cr';
+  const isSaaS = mode === 'saas';
+
+  // Detect if this is a Yogabar/ITC run (consumer mode only)
+  const isYogabar = !isSaaS && (prompt.toLowerCase().includes('yogabar') || prompt.toLowerCase().includes('yoga bar'));
+  const currencySymbol = (market === 'US' || market === 'Global' || isSaaS) ? '$' : '₹';
+  const currencyUnit = (market === 'US' || market === 'Global' || isSaaS) ? 'M' : 'Cr';
+  const currencyLabel = (market === 'US' || market === 'Global' || isSaaS) ? '$M' : '₹ Cr';
 
   const model =
     agentId === 'synopsis' ? 'claude-opus-4-6' :
@@ -445,40 +1045,83 @@ app.post('/api/claude', async (req, res) => {
                              'claude-sonnet-4-6';
 
   const maxTokens =
-    agentId === 'synopsis' ? 6000 :  // reduced from 8000 — shorter generation = less QUIC timeout risk
+    agentId === 'synopsis' ? 6000 :
     agentId === 'synergy'  ? 8000 :
                              16000;
 
   const maxSearches = agentId === 'synopsis' ? 2 : 5;
 
-  // Inject VERIFIED_DATA + agent-specific DATA_BLOCK schema into prompt
-  const schema = DATA_BLOCK_SCHEMAS[agentId] || DATA_BLOCK_SCHEMAS['market'];
-  // Replace CURRENCY/UNIT placeholders in schema with actual currency for this market
+  // Pick schema set based on mode
+  const schemaSet = isSaaS ? SAAS_DATA_BLOCK_SCHEMAS : DATA_BLOCK_SCHEMAS;
+  const schema = schemaSet[agentId] || schemaSet[Object.keys(schemaSet)[0]];
   const schemaForMarket = schema
     .replace(/CURRENCY/g, currencySymbol)
     .replace(/UNIT/g, currencyUnit);
 
-  const dataBlockInstruction = `
+  // For SaaS mode: inject the SaaS narrative rules + SaaS prompt
+  // For consumer mode: use the prompt as-is (NARRATIVE_RULES already in prompt from App.js)
+  let finalPrompt;
+  if (isSaaS) {
+    // Extract company name from context (App.js sends "COMPANY: Clay\n..." prefix)
+    const companyMatch = prompt.match(/^COMPANY:\s*(.+)/m);
+    const companyName = companyMatch ? companyMatch[1].trim() : 'the company';
+    const acquirerMatch = prompt.match(/^ACQUIRER:\s*(.+)/m);
+    const acquirerName = acquirerMatch ? acquirerMatch[1].trim() : 'the acquirer';
+
+    // Replace [COMPANY] and [ACQUIRER] placeholders in agent prompt
+    const rawAgentPrompt = SAAS_PROMPTS[agentId] || SAAS_PROMPTS['market'];
+    const saasAgentPrompt = rawAgentPrompt
+      .replace(/\[COMPANY\]/g, companyName)
+      .replace(/\[ACQUIRER\]/g, acquirerName);
+
+    const cleanedUserContext = prompt
+      .replace(/DATA_BLOCK — WRITE THIS FIRST[\s\S]*?<<<END_DATA_BLOCK>>>\s*\nDATA_BLOCK rules:[\s\S]*?Do not repeat or summarise the DATA_BLOCK in your prose\.\s*/g, '')
+      .trim();
+
+    const saasNarrativeRules = `COMPANY CONTEXT:
+This is a B2B SaaS/technology company analysis. All revenue figures in $M (USD millions) unless stated otherwise.
+
+WRITING STYLE — MANDATORY:
+Write in dense, precise prose — not bullet points, not numbered lists. Paragraphs only. Each paragraph makes one argument, develops it with evidence, and lands on an implication. Numbers appear inside sentences. Never write bullet lists. HTML tables permitted only for structured comparisons.
+
+CONFIDENCE LABELLING — MANDATORY FOR EVERY NUMBER:
+Every number, estimate, or data claim must carry: [HIGH CONFIDENCE — source], [MEDIUM CONFIDENCE — basis], or [LOW CONFIDENCE — basis] immediately after it.
+
+SHOW YOUR CALCULATIONS — MANDATORY:
+When you state a revenue figure, market size, or financial projection, show the calculation inline. Format: state the figure, then: "Calculation: [starting point] × [factor] = [result]"
+
+WEB SEARCH BUDGET: You have exactly 3 web searches. Use them on the highest-value queries — company-specific data that cannot be estimated from general knowledge.
+
+LENGTH: Target 700-1000 words of dense prose. Complete every section. Never truncate. For Synopsis: up to 1500 words.
+
+NEVER SHOW YOUR REASONING PROCESS: Begin immediately with analysis. No preamble, no meta-commentary.
+
+DATA_BLOCK — WRITE THIS FIRST, BEFORE YOUR PROSE:
+Begin your response with this block. Fill in ALL fields with real data.
+IMPORTANT: Use $M for ALL monetary values.
+
+\${schemaForMarket}
+
+\${DATA_BLOCK_RULES}`;
+
+    finalPrompt = saasNarrativeRules + '\n\n' + cleanedUserContext + '\n\n' + saasAgentPrompt;
+  } else {
+    const cleanedPrompt = prompt
+      .replace(/DATA_BLOCK — WRITE THIS FIRST[\s\S]*?<<<END_DATA_BLOCK>>>\s*\nDATA_BLOCK rules:[\s\S]*?Do not repeat or summarise the DATA_BLOCK in your prose\.\s*/g, '')
+      .replace(/VERIFIED FINANCIAL DATA:[\s\S]*?If no figures are provided, find them through web search\.\s*/g, '');
+    const verifiedBlock = isYogabar ? VERIFIED_DATA + '\n\n' : '';
+    const dataBlockInstruction = `
 DATA_BLOCK — WRITE THIS FIRST, BEFORE YOUR PROSE:
 
 Begin your response with this block. Fill in ALL fields with real data from your research.
 Why first: guarantees it is present even if response is long.
-IMPORTANT: Use ${currencyLabel} for ALL monetary values in this DATA_BLOCK.
+IMPORTANT: Use \${currencyLabel} for ALL monetary values in this DATA_BLOCK.
 
-${schemaForMarket}
+\${schemaForMarket}
 
-${DATA_BLOCK_RULES}`;
-
-  // Replace the generic DATA_BLOCK section in the incoming prompt with the agent-specific one
-  // The prompt from App.js already contains NARRATIVE_RULES with old generic schema —
-  // we strip that section and inject the agent-specific one
-  const cleanedPrompt = prompt
-    .replace(/DATA_BLOCK — WRITE THIS FIRST[\s\S]*?<<<END_DATA_BLOCK>>>\s*\nDATA_BLOCK rules:[\s\S]*?Do not repeat or summarise the DATA_BLOCK in your prose\.\s*/g, '')
-    .replace(/VERIFIED FINANCIAL DATA:[\s\S]*?If no figures are provided, find them through web search\.\s*/g, '');
-
-  // Only inject VERIFIED_DATA for Yogabar/ITC runs — other companies get wrong data otherwise
-  const verifiedBlock = isYogabar ? VERIFIED_DATA + '\n\n' : '';
-  const finalPrompt = verifiedBlock + dataBlockInstruction + '\n\n' + cleanedPrompt;
+\${DATA_BLOCK_RULES}`;
+    finalPrompt = verifiedBlock + dataBlockInstruction + '\n\n' + cleanedPrompt;
+  }
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
