@@ -70,19 +70,20 @@ INDUSTRY CONTEXT (search to verify exact current figures):
 // AGENT-SPECIFIC DATA_BLOCK SCHEMAS
 // Each agent gets a schema tailored to its visual requirements
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 const DATA_BLOCK_SCHEMAS = {
 
   market: `<<<DATA_BLOCK>>>
 {
   "agent": "market",
   "kpis": [
-    {"label": "D2C Nutrition Segment Size", "value": "CURRENCY X,XXX UNIT", "sub": "the insurgent sub-segment Yogabar competes in — NOT the total ₹45,000 Cr FMCG category", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Yogabar Share in D2C Segment", "value": "X.X%", "sub": "share within D2C/premium nutrition segment, not total FMCG — e.g. ₹202Cr / CURRENCY X,XXXCr segment", "trend": "up", "confidence": "H|M|L"},
+    {"label": "D2C Nutrition Segment Size", "value": "CURRENCY X,XXX UNIT", "sub": "the insurgent sub-segment [COMPANY] competes in — NOT the total ₹45,000 Cr FMCG category", "trend": "up", "confidence": "H|M|L"},
+    {"label": "[COMPANY] Share in Segment", "value": "X.X%", "sub": "share within addressable segment — e.g. [COMPANY] revenue / segment size", "trend": "up", "confidence": "H|M|L"},
     {"label": "D2C Segment YoY Growth", "value": "XX%", "sub": "growth rate of the insurgent D2C sub-segment, not blended category average", "trend": "up", "confidence": "H|M|L"},
-    {"label": "QC Share of Nutrition Revenue", "value": "XX%", "sub": "QC as % of Yogabar revenue — shows penetration gap", "trend": "up", "confidence": "H|M|L"}
+    {"label": "QC Share of [COMPANY] Revenue", "value": "XX%", "sub": "QC as % of [COMPANY] revenue — shows penetration gap", "trend": "up", "confidence": "H|M|L"}
   ],
   "competitorBubbles": [
-    {"name": "Yogabar", "growthRate": 83, "brandStrength": 72, "revenueCr": 202, "highlight": true},
+    {"name": "[COMPANY]", "growthRate": 0, "brandStrength": 0, "revenueCr": 0, "highlight": true},
     {"name": "Whole Truth", "growthRate": 0, "brandStrength": 0, "revenueCr": 0},
     {"name": "RiteBite", "growthRate": 0, "brandStrength": 0, "revenueCr": 0},
     {"name": "True Elements", "growthRate": 0, "brandStrength": 0, "revenueCr": 0},
@@ -95,11 +96,11 @@ const DATA_BLOCK_SCHEMAS = {
     {"year": "2026", "event": "describe shift", "type": "channel|product|competitive"}
   ],
   "channelHeatmap": [
-    {"channel": "Modern Trade",   "yogabarPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
-    {"channel": "Quick Commerce", "yogabarPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
-    {"channel": "D2C / E-comm",   "yogabarPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
-    {"channel": "Institutional",  "yogabarPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
-    {"channel": "Export / GCC",   "yogabarPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"}
+    {"channel": "Modern Trade",   "companyPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
+    {"channel": "Quick Commerce", "companyPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
+    {"channel": "D2C / E-comm",   "companyPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
+    {"channel": "Institutional",  "companyPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"},
+    {"channel": "Export / GCC",   "companyPresence": "H|M|L", "categoryGrowth": "H|M|L", "competitiveDensity": "H|M|L"}
   ],
   "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important finding"}
 }
@@ -111,15 +112,15 @@ const DATA_BLOCK_SCHEMAS = {
   "kpis": [
     {"label": "Active SKU Count", "value": "XX", "sub": "est. — focus on productive SKUs not total launches", "trend": "flat", "confidence": "H|M|L"},
     {"label": "Top SKU Revenue Concentration", "value": "XX%", "sub": "top 3 SKUs as % of revenue — concentration risk signal", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Portfolio Gross Margin vs Peers", "value": "XX% vs XX%", "sub": "Yogabar GM vs premium D2C peer benchmark (not vs FMCG average)", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Portfolio Gross Margin vs Peers", "value": "XX% vs XX%", "sub": "[COMPANY] GM vs premium peer benchmark", "trend": "up", "confidence": "H|M|L"},
     {"label": "Margin Upside via Mix Shift", "value": "+X pp", "sub": "gross margin gain if premium tier grows to X% of mix", "trend": "up", "confidence": "H|M|L"}
   ],
   "skuMatrix": [
-    {"name": "SKU/Tier name", "marketGrowth": 0, "yogabarPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "yogabarPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "yogabarPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "yogabarPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "yogabarPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"}
+    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"}
   ],
   "tierMargins": [
     {"tier": "Core (₹40-55)", "revenueSharePct": 0, "grossMarginPct": 0, "verdict": "KILL|KEEP|GROW|BUILD"},
@@ -140,13 +141,13 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "brand",
   "kpis": [
-    {"label": "Aided Awareness (Core TG)", "value": "XX%", "sub": "urban health-conscious 25-40 — Yogabar's actual target group, not general population", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Premium Score vs Whole Truth", "value": "X.X vs X.X", "sub": "Yogabar premium perception vs Whole Truth — the direct benchmark", "trend": "down", "confidence": "H|M|L"},
-    {"label": "ITC Association Impact", "value": "Positive|Neutral|Negative", "sub": "sentiment among core TG toward ITC ownership", "trend": "flat", "confidence": "H|M|L"},
-    {"label": "Repeat Rate vs D2C Benchmark", "value": "XX% vs XX%", "sub": "Yogabar repeat vs healthy D2C category benchmark", "trend": "up", "confidence": "H|M|L"}
+    {"label": "Aided Awareness (Core TG)", "value": "XX%", "sub": "urban health-conscious 25-40 — [COMPANY]'s actual target group, not general population", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Premium Score vs Whole Truth", "value": "X.X vs X.X", "sub": "[COMPANY] premium perception vs Whole Truth — the direct benchmark", "trend": "down", "confidence": "H|M|L"},
+    {"label": "[ACQUIRER] Association Impact", "value": "Positive|Neutral|Negative", "sub": "sentiment among core TG toward [ACQUIRER] ownership", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Repeat Rate vs D2C Benchmark", "value": "XX% vs XX%", "sub": "[COMPANY] repeat vs healthy D2C category benchmark", "trend": "up", "confidence": "H|M|L"}
   ],
   "positioningMap": [
-    {"name": "Yogabar", "functional": 0, "premium": 0, "highlight": true, "arrowFunctional": 0, "arrowPremium": 0},
+    {"name": "[COMPANY]", "functional": 0, "premium": 0, "highlight": true, "arrowFunctional": 0, "arrowPremium": 0},
     {"name": "Whole Truth", "functional": 0, "premium": 0, "highlight": false},
     {"name": "RiteBite Max", "functional": 0, "premium": 0, "highlight": false},
     {"name": "Britannia NutriChoice", "functional": 0, "premium": 0, "highlight": false},
@@ -161,7 +162,7 @@ const DATA_BLOCK_SCHEMAS = {
   "itcAssociationDial": {
     "currentPosition": 0,
     "recommendedPosition": 0,
-    "note": "0=hide ITC entirely, 50=equal prominence, 100=lead with ITC"
+    "note": "0=hide [ACQUIRER] entirely, 50=equal prominence, 100=lead with [ACQUIRER]"
   },
   "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important finding"}
 }
@@ -256,7 +257,7 @@ const DATA_BLOCK_SCHEMAS = {
     {"label": "Rank in D2C Nutrition Segment", "value": "#X of X", "sub": "by revenue within D2C/premium nutrition — not vs Britannia or Kellogg's", "trend": "flat", "confidence": "H|M|L"},
     {"label": "Whole Truth Revenue Gap", "value": "₹XXCr behind/ahead", "sub": "absolute gap vs closest direct rival — closing or widening?", "trend": "up", "confidence": "H|M|L"},
     {"label": "Fastest Rival Growth Rate", "value": "+XX% (Name)", "sub": "who is accelerating fastest within the D2C peer set", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Yogabar Functional Gap", "value": "X SKUs vs XX", "sub": "functional/protein SKUs vs Whole Truth — product territory risk", "trend": "flat", "confidence": "H|M|L"}
+    {"label": "[COMPANY] Functional Gap", "value": "X SKUs vs XX", "sub": "functional/protein SKUs vs Whole Truth — product territory risk", "trend": "flat", "confidence": "H|M|L"}
   ],
   "threatHeatmap": [
     {"competitor": "Whole Truth",   "price": "H|M|L", "channel": "H|M|L", "product": "H|M|L", "brand": "H|M|L", "distribution": "H|M|L", "growth": "H|M|L"},
@@ -291,13 +292,13 @@ const DATA_BLOCK_SCHEMAS = {
     {"label": "Time to Capture Top 3", "value": "XX months", "sub": "est.", "trend": "flat", "confidence": "H|M|L"}
   ],
   "synergyMatrix": [
-    {"asset": "ITC GT Distribution (4M outlets)", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "[ACQUIRER] Distribution Network", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
     {"asset": "MT Shelf Relationships",           "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
     {"asset": "Agri Division Sourcing",           "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
     {"asset": "LSTC R&D Lab",                     "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "ITC Hotels Channel",               "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "[ACQUIRER] Retail/Channel Assets",               "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
     {"asset": "Export Infrastructure",            "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "ITC Brand Trust Halo",             "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"}
+    {"asset": "[ACQUIRER] Brand Trust Halo",             "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"}
   ],
   "synergyRoadmap": [
     {"quarter": "Q1 2026", "synergy": "describe action", "valueCr": 0},
@@ -357,7 +358,7 @@ const DATA_BLOCK_SCHEMAS = {
     {"name": "brand name", "market": "market", "strategy": "brief strategy", "revenueTrajectory": [0, 0, 0, 0], "lesson": "one transferable lesson"}
   ],
   "marketRadar": {
-    "axes": ["Market Size", "ITC Fit", "Diaspora Density", "Regulatory Ease", "Competitive Intensity"],
+    "axes": ["Market Size", "[ACQUIRER] Fit", "Diaspora Density", "Regulatory Ease", "Competitive Intensity"],
     "markets": [
       {"name": "GCC (UAE+KSA)", "scores": [0, 0, 0, 0, 0]},
       {"name": "UK", "scores": [0, 0, 0, 0, 0]},
@@ -1033,7 +1034,7 @@ app.post('/api/claude', async (req, res) => {
 
   const isSaaS = mode === 'saas';
 
-  // Detect if this is a Yogabar/ITC run (consumer mode only)
+  // Detect if this is a [COMPANY]/ITC run (consumer mode only)
   const isYogabar = !isSaaS && (prompt.toLowerCase().includes('yogabar') || prompt.toLowerCase().includes('yoga bar'));
   const currencySymbol = (market === 'US' || market === 'Global' || isSaaS) ? '$' : '₹';
   const currencyUnit = (market === 'US' || market === 'Global' || isSaaS) ? 'M' : 'Cr';
@@ -1054,9 +1055,24 @@ app.post('/api/claude', async (req, res) => {
   // Pick schema set based on mode
   const schemaSet = isSaaS ? SAAS_DATA_BLOCK_SCHEMAS : DATA_BLOCK_SCHEMAS;
   const schema = schemaSet[agentId] || schemaSet[Object.keys(schemaSet)[0]];
+  // Extract company/acquirer from prompt for schema personalisation
+  const schemaCompany = (() => {
+    const m = prompt.match(/^(?:COMPANY:\s*(.+)|analyzing\s+([\w\s]+?)(?:\s+for|\s+in|\.|,))/im);
+    // Fallback: grab first capitalised proper noun from prompt
+    const words = prompt.split(/[\n.,]/)[0].match(/[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*/g);
+    return (m && (m[1]||m[2])?.trim()) || (words && words[0]) || 'the company';
+  })();
+  const schemaAcquirer = (() => {
+    const m = prompt.match(/^ACQUIRER:\s*(.+)/im);
+    return m ? m[1].trim() : 'the acquirer';
+  })();
+
   const schemaForMarket = schema
     .replace(/CURRENCY/g, currencySymbol)
-    .replace(/UNIT/g, currencyUnit);
+    .replace(/UNIT/g, currencyUnit)
+    .replace(/\[COMPANY\]/g, schemaCompany)
+    .replace(/\[COMPANY_LOWER\]/g, schemaCompany.toLowerCase())
+    .replace(/\[ACQUIRER\]/g, schemaAcquirer);
 
   // For SaaS mode: inject the SaaS narrative rules + SaaS prompt
   // For consumer mode: use the prompt as-is (NARRATIVE_RULES already in prompt from App.js)
