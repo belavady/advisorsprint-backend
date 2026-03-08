@@ -1100,9 +1100,9 @@ DATA_BLOCK — WRITE THIS FIRST, BEFORE YOUR PROSE:
 Begin your response with this block. Fill in ALL fields with real data.
 IMPORTANT: Use $M for ALL monetary values.
 
-\${schemaForMarket}
+${schemaForMarket}
 
-\${DATA_BLOCK_RULES}`;
+${DATA_BLOCK_RULES}`;
 
     finalPrompt = saasNarrativeRules + '\n\n' + cleanedUserContext + '\n\n' + saasAgentPrompt;
   } else {
