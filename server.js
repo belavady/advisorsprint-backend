@@ -116,11 +116,11 @@ const DATA_BLOCK_SCHEMAS = {
     {"label": "Margin Upside via Mix Shift", "value": "+X pp", "sub": "gross margin gain if premium tier grows to X% of mix", "trend": "up", "confidence": "H|M|L"}
   ],
   "skuMatrix": [
-    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
-    {"name": "SKU/Tier name", "marketGrowth": 0, "[COMPANY_LOWER]Position": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"}
+    {"name": "SKU/Tier name", "marketGrowth": 0, "companyPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "companyPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "companyPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "companyPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"},
+    {"name": "SKU/Tier name", "marketGrowth": 0, "companyPosition": 0, "revenueCr": 0, "verdict": "STAR|CASHCOW|QUESTION|DOG"}
   ],
   "tierMargins": [
     {"tier": "Core (₹40-55)", "revenueSharePct": 0, "grossMarginPct": 0, "verdict": "KILL|KEEP|GROW|BUILD"},
@@ -159,11 +159,8 @@ const DATA_BLOCK_SCHEMAS = {
     {"dimension": "Innovation / Functional", "brandSaysPct": 0, "customerHearsPct": 0},
     {"dimension": "Value for Money", "brandSaysPct": 0, "customerHearsPct": 0}
   ],
-  "itcAssociationDial": {
-    "currentPosition": 0,
-    "recommendedPosition": 0,
-    "note": "0=hide [ACQUIRER] entirely, 50=equal prominence, 100=lead with [ACQUIRER]"
-  },
+  "itcAssociationDial": null,
+  "_dialNote": "IMPORTANT: Set itcAssociationDial to null if there is no acquirer. Only populate it when [ACQUIRER] is a real company that acquired [COMPANY]. If populated, use: {acquirerName, currentPosition (0-100), recommendedPosition (0-100), note}",
   "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — single most important finding"}
 }
 <<<END_DATA_BLOCK>>>`,
@@ -286,19 +283,18 @@ const DATA_BLOCK_SCHEMAS = {
 {
   "agent": "synergy",
   "kpis": [
-    {"label": "Synergies Realised (est.)", "value": "CURRENCY XX UNIT", "sub": "cumulative to date", "trend": "up", "confidence": "H|M|L"},
-    {"label": "Unrealised Synergy Value", "value": "CURRENCY XX UNIT", "sub": "est. 3-yr potential", "trend": "flat", "confidence": "H|M|L"},
-    {"label": "Highest-Value Next Asset", "value": "asset name", "sub": "est. value", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Value Unlocked (est.)", "value": "CURRENCY XX UNIT", "sub": "synergies captured or partnerships activated to date", "trend": "up", "confidence": "H|M|L"},
+    {"label": "Untapped Leverage Value", "value": "CURRENCY XX UNIT", "sub": "est. 3-yr potential from remaining levers", "trend": "flat", "confidence": "H|M|L"},
+    {"label": "Highest-Value Next Action", "value": "name it", "sub": "est. value unlock", "trend": "up", "confidence": "H|M|L"},
     {"label": "Time to Capture Top 3", "value": "XX months", "sub": "est.", "trend": "flat", "confidence": "H|M|L"}
   ],
   "synergyMatrix": [
-    {"asset": "[ACQUIRER] Distribution Network", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "MT Shelf Relationships",           "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "Agri Division Sourcing",           "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "LSTC R&D Lab",                     "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "[ACQUIRER] Retail/Channel Assets",               "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "Export Infrastructure",            "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
-    {"asset": "[ACQUIRER] Brand Trust Halo",             "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"}
+    {"asset": "Asset or leverage point 1 — name it specifically", "acquirerName": "[ACQUIRER]", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "Asset or leverage point 2 — name it specifically", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "Asset or leverage point 3 — name it specifically", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "Asset or leverage point 4 — name it specifically", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "Asset or leverage point 5 — name it specifically", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"},
+    {"asset": "Asset or leverage point 6 — name it specifically", "ease": 0, "valueCr": 0, "status": "activated|partial|untapped"}
   ],
   "synergyRoadmap": [
     {"quarter": "Q1 2026", "synergy": "describe action", "valueCr": 0},
@@ -321,11 +317,11 @@ const DATA_BLOCK_SCHEMAS = {
     {"label": "Fastest Payback", "value": "XX months", "sub": "best opportunity", "trend": "up", "confidence": "H|M|L"}
   ],
   "opportunityBubbles": [
-    {"name": "opportunity name", "itcFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
-    {"name": "opportunity name", "itcFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
-    {"name": "opportunity name", "itcFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
-    {"name": "opportunity name", "itcFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
-    {"name": "opportunity name", "itcFitScore": 0, "marketGrowthPct": 0, "tamCr": 0}
+    {"name": "opportunity name", "strategicFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
+    {"name": "opportunity name", "strategicFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
+    {"name": "opportunity name", "strategicFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
+    {"name": "opportunity name", "strategicFitScore": 0, "marketGrowthPct": 0, "tamCr": 0},
+    {"name": "opportunity name", "strategicFitScore": 0, "marketGrowthPct": 0, "tamCr": 0}
   ],
   "investmentReturn": [
     {"opportunity": "name", "investmentCr": 0, "year3RevenueCr": 0, "paybackMonths": 0},
@@ -1057,14 +1053,21 @@ app.post('/api/claude', async (req, res) => {
   const schema = schemaSet[agentId] || schemaSet[Object.keys(schemaSet)[0]];
   // Extract company/acquirer from prompt for schema personalisation
   const schemaCompany = (() => {
-    const m = prompt.match(/^(?:COMPANY:\s*(.+)|analyzing\s+([\w\s]+?)(?:\s+for|\s+in|\.|,))/im);
-    // Fallback: grab first capitalised proper noun from prompt
-    const words = prompt.split(/[\n.,]/)[0].match(/[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*/g);
-    return (m && (m[1]||m[2])?.trim()) || (words && words[0]) || 'the company';
+    // Primary: explicit COMPANY: prefix from App.js makePrompt
+    const m = prompt.match(/^COMPANY:\s*(.+)/im);
+    if (m) return m[1].trim();
+    // Secondary: [COMPANY] already replaced in prompt text
+    const w = prompt.match(/(?:analyzing|report on|analysis of)\s+([A-Z][\w\s]+?)(?:\s+for|\s+in|\.|,|\n)/i);
+    if (w) return w[1].trim();
+    // Fallback: first proper noun cluster
+    const words = prompt.split('\n')[0].match(/[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*/g);
+    return (words && words[0]) || 'the company';
   })();
   const schemaAcquirer = (() => {
     const m = prompt.match(/^ACQUIRER:\s*(.+)/im);
-    return m ? m[1].trim() : 'the acquirer';
+    if (m) return m[1].trim();
+    const a = prompt.match(/acquired by\s+([A-Z][\w\s]+?)(?:\s+in|\.|,|\n)/i);
+    return a ? a[1].trim() : 'the acquirer';
   })();
 
   const schemaForMarket = schema
