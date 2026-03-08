@@ -1045,8 +1045,8 @@ app.post('/api/claude', async (req, res) => {
                              'claude-sonnet-4-6';
 
   const maxTokens =
-    agentId === 'synopsis' ? 6000 :
-    agentId === 'synergy'  ? 8000 :
+    agentId === 'synopsis' ? 10000 :
+    agentId === 'synergy'  ? 10000 :
                              16000;
 
   const maxSearches = agentId === 'synopsis' ? 2 : 5;
@@ -1115,11 +1115,11 @@ DATA_BLOCK — WRITE THIS FIRST, BEFORE YOUR PROSE:
 
 Begin your response with this block. Fill in ALL fields with real data from your research.
 Why first: guarantees it is present even if response is long.
-IMPORTANT: Use \${currencyLabel} for ALL monetary values in this DATA_BLOCK.
+IMPORTANT: Use ${currencyLabel} for ALL monetary values in this DATA_BLOCK.
 
-\${schemaForMarket}
+${schemaForMarket}
 
-\${DATA_BLOCK_RULES}`;
+${DATA_BLOCK_RULES}`;
     finalPrompt = verifiedBlock + dataBlockInstruction + '\n\n' + cleanedPrompt;
   }
 
