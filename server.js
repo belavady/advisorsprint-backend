@@ -675,7 +675,12 @@ const SAAS_DATA_BLOCK_SCHEMAS = {
     {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"},
     {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"}
   ],
-  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — the single most important finding across all 9 agents", "confidence": "H|M|L"}
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — the single most important finding across all 9 agents", "confidence": "H|M|L"},
+  "boardQuestions": [
+    {"question": "specific strategic question the board must answer", "whyItMatters": "one sentence — consequence if unanswered", "answerableBy": "primary research|founder conversation|market test|regulatory clarity"},
+    {"question": "specific strategic question the board must answer", "whyItMatters": "one sentence — consequence if unanswered", "answerableBy": "primary research|founder conversation|market test|regulatory clarity"},
+    {"question": "specific strategic question the board must answer", "whyItMatters": "one sentence — consequence if unanswered", "answerableBy": "primary research|founder conversation|market test|regulatory clarity"}
+  ]
 }
 <<<END_DATA_BLOCK>>>`
 
@@ -998,6 +1003,9 @@ Not 10 generic recommendations. The 5 highest-impact, most time-sensitive action
 **The Underweighted Risk**
 The one threat that appeared in multiple agent analyses but is not getting enough attention publicly. This is the finding that separates a 10-agent synthesis from a single analyst's view — you saw it in the competitive analysis, confirmed it in the product analysis, and the funding analysis explains why it hasn't been addressed. Name it, explain why it is underweighted, and state what the consequence is if it materialises.
 
+**Three Questions the Board Must Answer**
+Not rhetorical questions — specific strategic questions that this report cannot answer because they require primary research, founder conversations, regulatory clarity, or a market test. For each: the question itself (one sentence, specific to [COMPANY], not generic), why it matters (one concrete consequence if unanswered), and what type of information would answer it. These are the questions a board member would raise that no analyst report pre-empts.
+
 **The One Unanswered Question**
 The single most important strategic question [COMPANY] has not answered publicly and must answer in the next 12 months. Not a question about tactics — a question about identity. Examples: "Is [COMPANY] a data company or a workflow company?" "Does [COMPANY] need to own the data or just orchestrate it?" "Can [COMPANY] win enterprise without a direct sales motion?" The answer to this question determines the next 3 years.
 
@@ -1114,6 +1122,14 @@ WEB SEARCH BUDGET: You have exactly 3 web searches. Use them on the highest-valu
 LENGTH: Target 700-1000 words of dense prose. Complete every section. Never truncate. For Synopsis: up to 1500 words.
 
 NEVER SHOW YOUR REASONING PROCESS: Begin immediately with analysis. No preamble, no meta-commentary.
+
+NO OPENING ORIENTATION: Do not begin with sentences that describe what you are about to cover. Never write: "This section examines...", "In this analysis we will cover...", "Agent [N] focuses on...", or any variant. The first sentence must deliver a substantive finding — a number, a market dynamic, a competitive fact, a strategic implication. Not a description of what follows.
+
+PROSE TIGHTENING — MANDATORY:
+Do not write a sentence that only restates a number already in your DATA_BLOCK or a section header. Assume the reader has seen the number — the sentence must add interpretation, not repetition.
+Do not write closing summary sentences at the end of a section. Never write: "In summary...", "Taken together...", "This analysis shows...", or any sentence that summarises what the preceding paragraph already said. End each section on its last substantive point.
+Do not write transition sentences between sections. Move directly to the next section's first finding.
+Every sentence must do one of: deliver a fact not yet stated, explain what a fact means, or name an action that follows from a fact. Any sentence doing none of these must not be written.
 
 DATA_BLOCK — WRITE THIS FIRST, BEFORE YOUR PROSE:
 Begin your response with this block. Fill in ALL fields with real data.
