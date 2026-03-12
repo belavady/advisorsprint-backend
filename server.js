@@ -684,6 +684,10 @@ const SAAS_DATA_BLOCK_SCHEMAS = {
 }
 <<<END_DATA_BLOCK>>>`
 
+  // brief is consumer-only — this entry prevents silent fallback to market schema
+  // The SaaS guard above means this is never reached in practice
+  // brief: null  (intentionally absent — consumer App.js owns the brief prompt)
+
 };
 
 
@@ -1038,6 +1042,12 @@ app.post('/api/claude', async (req, res) => {
 
   const isSaaS = mode === 'saas';
 
+  // CEO Opportunity Brief is consumer-only
+  // Guard so a misconfigured call fails loudly, not silently with wrong output
+  if (isSaaS && agentId === 'brief') {
+    return res.status(400).json({ error: 'CEO Opportunity Brief is consumer-only — not available in SaaS mode' });
+  }
+
   // Detect if this is a [COMPANY]/ITC run (consumer mode only)
   const isYogabar = !isSaaS && (prompt.toLowerCase().includes('yogabar') || prompt.toLowerCase().includes('yoga bar'));
   const currencySymbol = (market === 'US' || market === 'Global' || isSaaS) ? '$' : '₹';
@@ -1047,14 +1057,16 @@ app.post('/api/claude', async (req, res) => {
   const model =
     agentId === 'synopsis' ? 'claude-opus-4-6' :
     agentId === 'synergy'  ? 'claude-opus-4-6' :
+    agentId === 'brief'    ? 'claude-opus-4-6' :
                              'claude-sonnet-4-6';
 
   const maxTokens =
     agentId === 'synopsis' ? 10000 :
     agentId === 'synergy'  ? 10000 :
+    agentId === 'brief'    ? 12000 :
                              16000;
 
-  const maxSearches = agentId === 'synopsis' ? 2 : 5;
+  const maxSearches = agentId === 'synopsis' ? 2 : agentId === 'brief' ? 3 : 5;
 
   // Pick schema set based on mode
   const schemaSet = isSaaS ? SAAS_DATA_BLOCK_SCHEMAS : DATA_BLOCK_SCHEMAS;
@@ -1096,7 +1108,10 @@ app.post('/api/claude', async (req, res) => {
     const acquirerName = acquirerMatch ? acquirerMatch[1].trim() : 'the acquirer';
 
     // Replace [COMPANY] and [ACQUIRER] placeholders in agent prompt
-    const rawAgentPrompt = SAAS_PROMPTS[agentId] || SAAS_PROMPTS['market'];
+    // brief is consumer-only and guarded above — this line is never reached for brief
+    // but if it were, fail to synopsis rather than market to make the error obvious
+    const rawAgentPrompt = SAAS_PROMPTS[agentId] || (agentId === 'brief' ? null : SAAS_PROMPTS['market']);
+    if (!rawAgentPrompt) return res.status(400).json({ error: `No SaaS prompt found for agentId: ${agentId}` });
     const saasAgentPrompt = rawAgentPrompt
       .replace(/\[COMPANY\]/g, companyName)
       .replace(/\[ACQUIRER\]/g, acquirerName);
@@ -1167,7 +1182,7 @@ ${DATA_BLOCK_RULES}`;
   const sendEvent = (type, data) => res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
 
   // Synopsis/Synergy use Opus and take 3-4 min — keepalive every 8s to prevent QUIC drops
-  const keepaliveMs = (agentId === 'synopsis' || agentId === 'synergy') ? 8000 : 20000;
+  const keepaliveMs = (agentId === 'synopsis' || agentId === 'synergy' || agentId === 'brief') ? 8000 : 20000;
   const keepaliveInterval = setInterval(() => {
     try { res.write(': keepalive\n\n'); } catch(e) { clearInterval(keepaliveInterval); }
   }, keepaliveMs);
