@@ -10,6 +10,14 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
+// Force HTTP/1.1 on every response — prevents Chrome ERR_QUIC_PROTOCOL_ERROR
+// on long-running SSE streams. Alt-Svc:clear tells the browser to stop using
+// any cached QUIC/HTTP3 route to this origin.
+app.use((req, res, next) => {
+  res.setHeader('Alt-Svc', 'clear');
+  next();
+});
+
 app.get('/', (req, res) => res.json({ status: 'OK', agents: 10, pdf: 'puppeteer-ready' }));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1187,64 +1195,101 @@ ${DATA_BLOCK_RULES}`;
     try { res.write(': keepalive\n\n'); } catch(e) { clearInterval(keepaliveInterval); }
   }, keepaliveMs);
 
-  try {
-    let fullText = '';
-    const sources = [];
+  // Overload-aware retry — up to 3 attempts with exponential backoff
+  // Anthropic returns overloaded_error (529) during high-traffic periods
+  // Retry after 15s, 30s, 60s before giving up
+  const MAX_ATTEMPTS = 3;
+  const OVERLOAD_DELAYS = [15000, 30000, 60000];
 
-    const stream = anthropic.messages.stream({
-      model, max_tokens: maxTokens,
-      tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches }],
-      messages: [{ role: 'user', content: finalPrompt }],
-    });
+  const isOverloadError = (err) => {
+    const msg = err?.message || '';
+    return msg.includes('overloaded_error') || msg.includes('overloaded') ||
+           msg.includes('529') || err?.status === 529 || err?.error?.type === 'overloaded_error';
+  };
 
-    stream.on('text', (text) => { fullText += text; sendEvent('chunk', { text }); });
+  let lastError;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      let fullText = '';
+      const sources = [];
 
-    stream.on('streamEvent', (event) => {
-      if (event.type !== 'content_block_delta' && event.type !== 'ping') {
-        console.log(`[${agentId}] streamEvent:`, event.type, event.content_block?.type || '');
+      if (attempt > 1) {
+        const waitMs = OVERLOAD_DELAYS[attempt - 2];
+        console.log(`[${agentId}] Overloaded — attempt ${attempt}/${MAX_ATTEMPTS}, waiting ${waitMs/1000}s`);
+        sendEvent('retrying', { message: `API overloaded — retrying in ${waitMs/1000}s (attempt ${attempt}/${MAX_ATTEMPTS})` });
+        await new Promise(r => setTimeout(r, waitMs));
       }
-      if (event.type === 'content_block_start') {
-        const block = event.content_block;
-        if (block?.type === 'tool_use' && block?.name === 'web_search') sendEvent('searching', { query: '' });
-        if (block?.type === 'web_search_tool_result') {
-          const results = Array.isArray(block.content) ? block.content : [];
-          for (const item of results) {
-            const url = item.url || item.source || item.link;
-            const title = item.title || item.name || url;
-            if (url && !sources.find(s => s.url === url)) {
-              sources.push({ url, title, agent: agentId });
-              sendEvent('source', { url, title, agent: agentId });
+
+      const stream = anthropic.messages.stream({
+        model, max_tokens: maxTokens,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches }],
+        messages: [{ role: 'user', content: finalPrompt }],
+      });
+
+      stream.on('text', (text) => { fullText += text; sendEvent('chunk', { text }); });
+
+      stream.on('streamEvent', (event) => {
+        if (event.type !== 'content_block_delta' && event.type !== 'ping') {
+          console.log(`[${agentId}] streamEvent:`, event.type, event.content_block?.type || '');
+        }
+        if (event.type === 'content_block_start') {
+          const block = event.content_block;
+          if (block?.type === 'tool_use' && block?.name === 'web_search') sendEvent('searching', { query: '' });
+          if (block?.type === 'web_search_tool_result') {
+            const results = Array.isArray(block.content) ? block.content : [];
+            for (const item of results) {
+              const url = item.url || item.source || item.link;
+              const title = item.title || item.name || url;
+              if (url && !sources.find(s => s.url === url)) {
+                sources.push({ url, title, agent: agentId });
+                sendEvent('source', { url, title, agent: agentId });
+              }
             }
           }
         }
-      }
-    });
+      });
 
-    stream.on('message', (msg) => {
-      for (const block of msg.content) {
-        if (block.type === 'server_tool_use' && block.name === 'web_search' && block.input?.query)
-          sendEvent('searching', { query: block.input.query.slice(0, 40) });
-        if (block.type === 'web_search_tool_result') {
-          const results = Array.isArray(block.content) ? block.content : [];
-          for (const item of results) {
-            const url = item.url || item.source || item.link;
-            const title = item.title || item.name || url;
-            if (url && !sources.find(s => s.url === url)) sources.push({ url, title, agent: agentId });
+      stream.on('message', (msg) => {
+        for (const block of msg.content) {
+          if (block.type === 'server_tool_use' && block.name === 'web_search' && block.input?.query)
+            sendEvent('searching', { query: block.input.query.slice(0, 40) });
+          if (block.type === 'web_search_tool_result') {
+            const results = Array.isArray(block.content) ? block.content : [];
+            for (const item of results) {
+              const url = item.url || item.source || item.link;
+              const title = item.title || item.name || url;
+              if (url && !sources.find(s => s.url === url)) sources.push({ url, title, agent: agentId });
+            }
           }
         }
-      }
-    });
+      });
 
-    await stream.finalMessage();
-    clearInterval(keepaliveInterval);
-    sendEvent('done', { text: fullText });
-    res.end();
-  } catch (error) {
-    clearInterval(keepaliveInterval);
-    console.error(`Agent ${agentId} error:`, error.message);
-    sendEvent('error', { message: error.message });
-    res.end();
+      await stream.finalMessage();
+      clearInterval(keepaliveInterval);
+      sendEvent('done', { text: fullText });
+      res.end();
+      return; // success — exit retry loop
+
+    } catch (error) {
+      lastError = error;
+      if (isOverloadError(error) && attempt < MAX_ATTEMPTS) {
+        // overloaded — loop will retry after delay
+        continue;
+      }
+      // Non-overload error OR final attempt — give up
+      clearInterval(keepaliveInterval);
+      console.error(`Agent ${agentId} error (attempt ${attempt}):`, error.message);
+      sendEvent('error', { message: error.message });
+      res.end();
+      return;
+    }
   }
+
+  // All attempts exhausted
+  clearInterval(keepaliveInterval);
+  console.error(`Agent ${agentId} failed after ${MAX_ATTEMPTS} attempts:`, lastError?.message);
+  sendEvent('error', { message: `Overloaded after ${MAX_ATTEMPTS} attempts — try again in a few minutes` });
+  res.end();
 });
 
 // ━━━ PUPPETEER PDF ENDPOINT ━━━
