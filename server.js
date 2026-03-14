@@ -683,12 +683,7 @@ const SAAS_DATA_BLOCK_SCHEMAS = {
     {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"},
     {"opportunity": "describe it", "valueM": 0, "confidence": "H|M|L"}
   ],
-  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — the single most important finding across all 9 agents", "confidence": "H|M|L"},
-  "boardQuestions": [
-    {"question": "specific strategic question the board must answer", "whyItMatters": "one sentence — consequence if unanswered", "answerableBy": "primary research|founder conversation|market test|regulatory clarity"},
-    {"question": "specific strategic question the board must answer", "whyItMatters": "one sentence — consequence if unanswered", "answerableBy": "primary research|founder conversation|market test|regulatory clarity"},
-    {"question": "specific strategic question the board must answer", "whyItMatters": "one sentence — consequence if unanswered", "answerableBy": "primary research|founder conversation|market test|regulatory clarity"}
-  ]
+  "verdictRow": {"verdict": "STRONG|WATCH|OPTIMISE|UNDERDELIVERED|RISK", "finding": "one sentence — the single most important finding across all 9 agents", "confidence": "H|M|L"}
 }
 <<<END_DATA_BLOCK>>>`
 
@@ -1016,7 +1011,6 @@ Not 10 generic recommendations. The 5 highest-impact, most time-sensitive action
 The one threat that appeared in multiple agent analyses but is not getting enough attention publicly. This is the finding that separates a 10-agent synthesis from a single analyst's view — you saw it in the competitive analysis, confirmed it in the product analysis, and the funding analysis explains why it hasn't been addressed. Name it, explain why it is underweighted, and state what the consequence is if it materialises.
 
 **Three Questions the Board Must Answer**
-Not rhetorical questions — specific strategic questions that this report cannot answer because they require primary research, founder conversations, regulatory clarity, or a market test. For each: the question itself (one sentence, specific to [COMPANY], not generic), why it matters (one concrete consequence if unanswered), and what type of information would answer it. These are the questions a board member would raise that no analyst report pre-empts.
 
 **The One Unanswered Question**
 The single most important strategic question [COMPANY] has not answered publicly and must answer in the next 12 months. Not a question about tactics — a question about identity. Examples: "Is [COMPANY] a data company or a workflow company?" "Does [COMPANY] need to own the data or just orchestrate it?" "Can [COMPANY] win enterprise without a direct sales motion?" The answer to this question determines the next 3 years.
