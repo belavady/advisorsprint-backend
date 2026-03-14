@@ -1201,11 +1201,17 @@ ${DATA_BLOCK_RULES}`;
   const MAX_ATTEMPTS = 3;
   const OVERLOAD_DELAYS = [15000, 30000, 60000];
 
-  const isOverloadError = (err) => {
+  const isRetriableError = (err) => {
     const msg = err?.message || '';
+    const errType = err?.error?.type || '';
+    // Retry on overload (529) AND internal server errors (500/api_error) — both are transient
     return msg.includes('overloaded_error') || msg.includes('overloaded') ||
-           msg.includes('529') || err?.status === 529 || err?.error?.type === 'overloaded_error';
+           msg.includes('529') || err?.status === 529 || errType === 'overloaded_error' ||
+           msg.includes('api_error') || errType === 'api_error' ||
+           msg.includes('Internal server error') || err?.status === 500;
   };
+  // Keep old name as alias for logging clarity
+  const isOverloadError = isRetriableError;
 
   let lastError;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -1215,8 +1221,9 @@ ${DATA_BLOCK_RULES}`;
 
       if (attempt > 1) {
         const waitMs = OVERLOAD_DELAYS[attempt - 2];
-        console.log(`[${agentId}] Overloaded — attempt ${attempt}/${MAX_ATTEMPTS}, waiting ${waitMs/1000}s`);
-        sendEvent('retrying', { message: `API overloaded — retrying in ${waitMs/1000}s (attempt ${attempt}/${MAX_ATTEMPTS})` });
+        const errLabel = isOverloadError(lastError) && (lastError?.message||'').includes('overload') ? 'overloaded' : 'API error';
+        console.log(`[${agentId}] ${errLabel} — attempt ${attempt}/${MAX_ATTEMPTS}, waiting ${waitMs/1000}s`);
+        sendEvent('retrying', { message: `${errLabel} — retrying in ${waitMs/1000}s (attempt ${attempt}/${MAX_ATTEMPTS})` });
         await new Promise(r => setTimeout(r, waitMs));
       }
 
@@ -1272,11 +1279,11 @@ ${DATA_BLOCK_RULES}`;
 
     } catch (error) {
       lastError = error;
-      if (isOverloadError(error) && attempt < MAX_ATTEMPTS) {
-        // overloaded — loop will retry after delay
+      if (isRetriableError(error) && attempt < MAX_ATTEMPTS) {
+        // transient error (overload or internal) — loop will retry after delay
         continue;
       }
-      // Non-overload error OR final attempt — give up
+      // Non-retriable error OR final attempt — give up
       clearInterval(keepaliveInterval);
       console.error(`Agent ${agentId} error (attempt ${attempt}):`, error.message);
       sendEvent('error', { message: error.message });
