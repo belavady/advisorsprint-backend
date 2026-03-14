@@ -1050,11 +1050,9 @@ app.post('/api/claude', async (req, res) => {
 
   const isSaaS = mode === 'saas';
 
-  // CEO Opportunity Brief is consumer-only
-  // Guard so a misconfigured call fails loudly, not silently with wrong output
-  if (isSaaS && agentId === 'brief') {
-    return res.status(400).json({ error: 'CEO Opportunity Brief is consumer-only — not available in SaaS mode' });
-  }
+  // Brief agent works in both consumer and SaaS modes
+  // Consumer: prompt built in App.js with consumer brief prompt
+  // SaaS: prompt built in App-SaaS.js with SAAS_BRIEF_PROMPT, passed through as-is
 
   // Detect if this is a [COMPANY]/ITC run (consumer mode only)
   const isYogabar = !isSaaS && (prompt.toLowerCase().includes('yogabar') || prompt.toLowerCase().includes('yoga bar'));
@@ -1116,13 +1114,19 @@ app.post('/api/claude', async (req, res) => {
     const acquirerName = acquirerMatch ? acquirerMatch[1].trim() : 'the acquirer';
 
     // Replace [COMPANY] and [ACQUIRER] placeholders in agent prompt
-    // brief is consumer-only and guarded above — this line is never reached for brief
-    // but if it were, fail to synopsis rather than market to make the error obvious
-    const rawAgentPrompt = SAAS_PROMPTS[agentId] || (agentId === 'brief' ? null : SAAS_PROMPTS['market']);
-    if (!rawAgentPrompt) return res.status(400).json({ error: `No SaaS prompt found for agentId: ${agentId}` });
-    const saasAgentPrompt = rawAgentPrompt
-      .replace(/\[COMPANY\]/g, companyName)
-      .replace(/\[ACQUIRER\]/g, acquirerName);
+    // For brief: the full prompt is already built in App-SaaS.js (SAAS_BRIEF_PROMPT injected by makeSaaSPrompt)
+    // so we use the incoming prompt directly — no server-side prompt injection needed
+    let saasAgentPrompt;
+    if (agentId === 'brief') {
+      // Brief prompt is fully self-contained from the frontend — pass through as-is
+      saasAgentPrompt = null; // signals below to use cleanedUserContext directly
+    } else {
+      const rawAgentPrompt = SAAS_PROMPTS[agentId] || SAAS_PROMPTS['market'];
+      if (!rawAgentPrompt) return res.status(400).json({ error: `No SaaS prompt found for agentId: ${agentId}` });
+      saasAgentPrompt = rawAgentPrompt
+        .replace(/\[COMPANY\]/g, companyName)
+        .replace(/\[ACQUIRER\]/g, acquirerName);
+    }
 
     const cleanedUserContext = prompt
       .replace(/DATA_BLOCK — WRITE THIS FIRST[\s\S]*?<<<END_DATA_BLOCK>>>\s*\nDATA_BLOCK rules:[\s\S]*?Do not repeat or summarise the DATA_BLOCK in your prose\.\s*/g, '')
@@ -1162,7 +1166,13 @@ ${schemaForMarket}
 
 ${DATA_BLOCK_RULES}`;
 
-    finalPrompt = saasNarrativeRules + '\n\n' + cleanedUserContext + '\n\n' + saasAgentPrompt;
+    // For brief: frontend has already built the complete prompt — use cleanedUserContext directly
+    // For all other SaaS agents: assemble with narrative rules + context + agent prompt
+    if (agentId === 'brief') {
+      finalPrompt = cleanedUserContext; // full brief prompt already in cleanedUserContext
+    } else {
+      finalPrompt = saasNarrativeRules + '\n\n' + cleanedUserContext + '\n\n' + saasAgentPrompt;
+    }
   } else {
     const cleanedPrompt = prompt
       .replace(/DATA_BLOCK — WRITE THIS FIRST[\s\S]*?<<<END_DATA_BLOCK>>>\s*\nDATA_BLOCK rules:[\s\S]*?Do not repeat or summarise the DATA_BLOCK in your prose\.\s*/g, '')
